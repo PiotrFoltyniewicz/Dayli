@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
+import Home from './components/Home';
 import Navbar from './components/Navbar';
+import Login from './components/Login';
 import './custom.css';
 function App() {
     const displayName = App.name;
@@ -9,10 +10,9 @@ function App() {
         <div>
             <Navbar/>
             <Routes>
-                {AppRoutes.map((route, index) => {
-                    const { element, ...rest } = route;
-                    return <Route key={index} {...rest} element={element} />;
-                })}
+                <Route index element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
         </div>
     );

@@ -1,6 +1,6 @@
 import { useState } from "react"
 function Login() {
-    const [pass, setPass] = useState({ login="", password=""})
+    const [pass, setPass] = useState({ login:"", password:""})
     return (
         <div>
             <input type="text"
