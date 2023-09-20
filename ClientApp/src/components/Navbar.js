@@ -1,15 +1,20 @@
-function Navbar() {
+import React, { Link } from "react"
+function Navbar()
+{
     return (
-        <ol>
-            <li>
-                Logo
-            </li>
-            <li>
-                Home
-            </li>
-            <li>
-                Profile
-            </li>
-        </ol>
-    )
+        <nav>
+            <ul>
+                <li>
+                    Logo
+                </li>
+                <li>
+                    Home
+                </li>
+                <li>
+                    Profile
+                </li>
+            </ul>
+        </nav>
+    );
 }
+export default Navbar;
