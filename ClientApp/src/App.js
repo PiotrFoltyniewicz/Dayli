@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
 import './custom.css';
 
 export default function App(){
-  const displayName = App.name;
+    const displayName = App.name;
     return (
         <div><p>test</p>
         <Routes>

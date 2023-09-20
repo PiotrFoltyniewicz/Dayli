@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Web;
+using BetterDay.Models;
+using BetterDay.Errors;
 
 namespace BetterDay.Controllers
 {
@@ -8,12 +9,19 @@ namespace BetterDay.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpPut]
-        
-        public IActionResult CreateUser()
-        {
+        private readonly ILogger _logger;
 
-            return StatusCode(1);
+        public UserController(ILogger<UserController> logger)
+        {
+            _logger = logger;
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] UserModel user)
+        {
+            var result = UserModel.CreateUser(user).Result;
+
+            return StatusCode(result.StatusCode, result.ErrorMessage);
         }
     }
 }
