@@ -1,4 +1,4 @@
-namespace BetterDay
+namespace BetterDay.Models
 {
     public class WeatherForecast
     {
