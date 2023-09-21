@@ -38,7 +38,7 @@ namespace BetterDay.Models
             return new ApiError(201, "Successfully created new user");
         }
         /*
-        public async static Task<ApiError> LoginUser(UserModel userData)
+        public async static Task<(string ,ApiError)> LoginUser(UserModel userData)
         {
             using var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
         }

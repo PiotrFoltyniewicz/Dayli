@@ -20,7 +20,7 @@ function App() {
                 password: 'smurfcat123'
             })
         }
-        fetch('api/user',requestOptions)
+        fetch('api/userregistration',requestOptions)
             .then(response => console.log(response.json()));
     }
     */
