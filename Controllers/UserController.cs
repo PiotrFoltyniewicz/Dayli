@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using BetterDay.Models;
-using BetterDay.Errors;
 
 namespace BetterDay.Controllers
 {
@@ -17,11 +15,19 @@ namespace BetterDay.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody] UserModel user)
+        public async Task<IActionResult> CreateUser([FromBody] UserModel user)
         {
-            var result = UserModel.CreateUser(user).Result;
-
-            return StatusCode(result.StatusCode, result.ErrorMessage);
+            var result = await UserModel.CreateUser(user);
+            return new JsonResult(result);
         }
+
+        /*
+        [HttpPost]
+        public async Task<IActionResult> LoginUser([FromBody] UserModel user)
+        {
+            var result = await UserModel.LoginUser(user);
+            return new JsonResult(result);
+        }
+        */
     }
 }

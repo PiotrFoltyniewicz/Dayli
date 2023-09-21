@@ -6,6 +6,24 @@ import Login from './components/Login';
 import './custom.css';
 function App() {
     const displayName = App.name;
+    /*
+    useEffect(() => {
+        test();
+    });
+
+    function test() {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: 'papasmerf',
+                password: 'smurfcat123'
+            })
+        }
+        fetch('api/user',requestOptions)
+            .then(response => console.log(response.json()));
+    }
+    */
     return (
         <div>
             <Navbar/>

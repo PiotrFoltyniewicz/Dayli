@@ -21,20 +21,27 @@ namespace BetterDay.Models
             using var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand($"SELECT Username FROM users WHERE{userData.Username}");
+            var query = new MySqlCommand($"SELECT Username FROM `users` WHERE Username = '{userData.Username}'", connection);
             var reader = await query.ExecuteReaderAsync();
-
             if (reader.HasRows)
             {
                 await connection.CloseAsync();
-                return new ApiError(469, "This username already exists");
+                return new ApiError(422, "User already exists");
             }
+            await reader.CloseAsync();
 
-            query = new MySqlCommand($"INSERT INTO users (Username, Password) VALUES ({userData.Username}, {Encryption.EncryptText(userData.Password)})");
+            query = new MySqlCommand($"INSERT INTO `users` (Username, Password) VALUES ('{userData.Username}', '{Encryption.EncryptText(userData.Password)}')", connection);
             reader = await query.ExecuteReaderAsync();
+            await reader.CloseAsync();
 
             await connection.CloseAsync();
-            return new ApiError(111, "Successfully created new user");
+            return new ApiError(201, "Successfully created new user");
         }
+        /*
+        public async static Task<ApiError> LoginUser(UserModel userData)
+        {
+            using var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+        }
+        */
     }
 }

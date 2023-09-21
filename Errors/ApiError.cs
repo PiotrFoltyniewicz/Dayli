@@ -3,12 +3,12 @@
     public class ApiError
     {
         public int StatusCode { get; private set; }
-        public string ErrorMessage { get; private set; }
+        public string Message { get; private set; }
 
-        public ApiError(int statusCode, string errorMessage)
+        public ApiError(int statusCode, string message)
         {
             StatusCode = statusCode;
-            ErrorMessage = errorMessage;
+            Message = message;
         }
     }
 }
