@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BetterDay.Models;
+using BetterDay.Errors;
 
 namespace BetterDay.Controllers
 {
@@ -15,8 +16,12 @@ namespace BetterDay.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] UserModel user)
+        public async Task<IActionResult> RegisterUser([FromBody] UserModel user)
         {
+            if(user.Username == null || user.Password == null)
+            {
+                return new JsonResult(new ApiError(400, "Username or password is null"));
+            }
             var result = await UserModel.CreateUser(user);
             return new JsonResult(result);
         }
