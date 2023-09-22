@@ -1,11 +1,17 @@
 ﻿using MySqlConnector;
 using BetterDay.Errors;
+using Microsoft.AspNetCore.Mvc;
+using BetterDay.Models;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace BetterDay.Models
 {
     public class UserModel
     {
-        public int? Id { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
 
