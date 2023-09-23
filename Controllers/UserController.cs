@@ -27,6 +27,7 @@ namespace BetterDay.Controllers
         [Route("login")]
         public async Task<IActionResult> LoginUser([FromBody] UserModel user)
         {
+            return new JsonResult(new ApiError(69, "test"));
             if(user != null)
             {
                 if (await UserModel.LoginUser(user))
