@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import './custom.css';
 function App() {
-    const displayName = App.name;
     /*
     useEffect(() => {
         test();
@@ -30,6 +29,7 @@ function App() {
             <Routes>
                 <Route index element={<Home />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/about" element={<h3>About</h3>} />
                 <Route path="/login" element={<Login />} />
             </Routes>
         </div>

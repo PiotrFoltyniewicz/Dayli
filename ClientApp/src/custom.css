@@ -12,3 +12,38 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+body {
+    margin: 0;
+}
+.navbar {
+    background-color: darkgray;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+}
+.navbar ul {
+    display:flex;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.navbar--name {
+    font-size: 32px;
+}
+.navbar a {
+    color: inherit;
+    text-decoration: none ;
+    padding:10px;
+}
+.navbar li > a {
+    font-size: larger;
+    border-radius: 15px;
+}
+.navbar li > a:hover {
+    background-color: lightgray;
+}
+

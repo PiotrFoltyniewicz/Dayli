@@ -1,6 +1,6 @@
 import { useState } from "react"
 function Login() {
-    const [pass, setPass] = useState({ login:"", password:""})
+    const [pass, setPass] = useState({ login: "", password: "" })
     return (
         <div>
             <input type="text"
@@ -11,10 +11,11 @@ function Login() {
             />
             <input type="password"
                 placeholder="password"
-                className="Login--pasword"
+                className="Login--password"
                 name="Login"
                 value="pass.password"
             />
+            <input type="submit" />
         </div>
     )
 }

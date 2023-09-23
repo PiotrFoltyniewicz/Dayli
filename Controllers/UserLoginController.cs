@@ -17,8 +17,9 @@ namespace BetterDay.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] UserModel user)
         {
-            var result = await UserModel.LoginUser(user);
-            return new JsonResult(result);
+            //błędy var result = await UserModel.LoginUser(user);
+            //      return new JsonResult(result);
+            return null;
         }
     }
 }
