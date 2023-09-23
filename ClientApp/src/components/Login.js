@@ -1,18 +1,29 @@
 import { useState } from "react"
+
 function Login() {
     const [pass, setPass] = useState({ username: "", password: "" })
     function handleChange(event) {
         const { name, value } = event.target
         setPass(prevPass => ({ ...prevPass, [name]: value }))
     }
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
-        const { user, password } = pass
-        console.log(user, password)
+        const { username, password } = pass
+        console.log(username, password)
+
+        const response = await fetch('/api/userlogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+        console.log(response)
+
     }
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     id="username"
@@ -21,7 +32,7 @@ function Login() {
                     name="username"
                     autoComplete="username"
                     required
-                    value={pass.login}
+                    value={pass.username}
                     onChange={handleChange}
                 />
                 <input
@@ -35,10 +46,7 @@ function Login() {
                     value={pass.password}
                     onChange={handleChange}
                 />
-                <input
-                    type="submit"
-                    onSubmit={handleSubmit}
-                />
+                <button type="submit">Log in</button>
             </form>
         </div>
     )
