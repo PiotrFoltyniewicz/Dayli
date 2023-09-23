@@ -11,7 +11,7 @@ function Login() {
         const { username, password } = pass
         console.log(username, password)
 
-        const response = await fetch('/api/user/login', {
+        const response = await fetch('/api/userlogin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
