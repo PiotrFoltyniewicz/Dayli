@@ -15,10 +15,9 @@ namespace BetterDay.Controllers
         private IConfiguration configuration;
         private ILogger logger;
 
-        public UserLoginController(IConfiguration configuration, ILogger logger)
+        public UserLoginController(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.logger = logger;
         }
 
 

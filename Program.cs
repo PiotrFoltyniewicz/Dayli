@@ -43,15 +43,11 @@ namespace BetterDay
                 app.UseHsts();
             }
 
-            
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

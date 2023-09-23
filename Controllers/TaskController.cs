@@ -11,12 +11,14 @@ namespace BetterDay.Controllers
     [Authorize]
     public class TaskController : ControllerBase
     {
-        
+
         // GET: api/task/today
+        [HttpGet]
         [Route("today")]
-        public IActionResult GetTodaysTask()
+        public ActionResult<TaskModel> GetTodaysTask()
         {
-            return null;
+
+            return new TaskModel(DateTime.Now, "Mow the lawn", 0);
         }
 
         // GET api/task/5

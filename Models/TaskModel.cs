@@ -19,5 +19,12 @@
                 Status = true;
             }
         }
+
+        public TaskModel(DateTime date, string title, bool status)
+        {
+            Date = date;
+            Title = title;
+            Status = status;
+        }
     }
 }

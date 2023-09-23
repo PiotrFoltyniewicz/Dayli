@@ -52,7 +52,7 @@ namespace BetterDay.Models
             if (reader.HasRows)
             {
                 await reader.ReadAsync();
-                if(Encryption.DecryptText(reader.GetString(2)) == userData.Password)
+                if (Encryption.DecryptText(reader.GetString(1)) == userData.Password)
                 {
                     await reader.CloseAsync();
                     await connection.CloseAsync();
