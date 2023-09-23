@@ -24,6 +24,9 @@ body {
     align-items: center;
     padding: 0 16px;
 }
+.navbar img {
+    height:48px;
+}
 .navbar ul {
     display:flex;
     gap: 16px;

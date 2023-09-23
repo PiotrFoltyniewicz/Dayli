@@ -1,10 +1,11 @@
 import React, { Link } from "react"
+import betterDayLogo from "../images/betterDayLogo.png"
 function Navbar()
 {
     return (
         <nav className="navbar">
             <a className="navbar--name" href="/">
-                <img src="" alt="Logo"></img>
+                <img src={betterDayLogo} alt="Logo"></img>
                 BetterDay
             </a>
             <ul>
