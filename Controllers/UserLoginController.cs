@@ -13,11 +13,14 @@ namespace BetterDay.Controllers
     public class UserLoginController : ControllerBase
     {
         private IConfiguration configuration;
+        private ILogger logger;
 
-        public UserLoginController(IConfiguration configuration)
+        public UserLoginController(IConfiguration configuration, ILogger logger)
         {
             this.configuration = configuration;
+            this.logger = logger;
         }
+
 
         [AllowAnonymous]
         [HttpPost]
@@ -52,7 +55,6 @@ namespace BetterDay.Controllers
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var jwtToken = tokenHandler.WriteToken(token);
-
                     return Ok(jwtToken);
                 }
             }
