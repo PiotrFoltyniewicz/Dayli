@@ -18,7 +18,13 @@ function Login() {
             },
             body: JSON.stringify({ username, password }),
         });
-        console.log(response)
+        if (response.ok) {
+            const data = await response.text(); 
+            const jwtToken = data; 
+            console.log("JWT Token:", jwtToken);
+        } else {
+            console.error('Login failed');
+        }
 
     }
     return (
