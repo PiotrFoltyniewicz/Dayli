@@ -1,6 +1,6 @@
 import React, { Link } from "react"
 import betterDayLogo from "../images/betterDayLogo.png"
-import { useAuth } from './AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 function Navbar()
 {

@@ -4,7 +4,7 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import './custom.css';
-import { AuthProvider } from './components/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
     /*
