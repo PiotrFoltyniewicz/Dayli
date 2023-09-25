@@ -39,7 +39,8 @@ namespace BetterDay.Controllers
 
                     var subject = new ClaimsIdentity(new[]
                     {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Username)
+                        new Claim(JwtRegisteredClaimNames.Sub, configuration["JWT:Subject"]),
+                        new Claim("Username", user.Username)
                     });
 
                     var expires = DateTime.UtcNow.AddMinutes(10);
