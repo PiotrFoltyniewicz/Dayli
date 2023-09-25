@@ -1,7 +1,10 @@
 import { useState } from "react"
+import { useAuth } from './AuthContext';
+
 
 function Login() {
     const [pass, setPass] = useState({ username: "", password: "" })
+    const token = useAuth().token
     function handleChange(event) {
         const { name, value } = event.target
         setPass(prevPass => ({ ...prevPass, [name]: value }))
@@ -21,11 +24,16 @@ function Login() {
         if (response.ok) {
             const data = await response.text(); 
             const jwtToken = data; 
+            sessionStorage.setItem('jwtToken', data);
+
             console.log("JWT Token:", jwtToken);
         } else {
             console.error('Login failed');
         }
 
+    }
+    function handleTest() {
+        console.log(token)
     }
     return (
         <div>
@@ -54,6 +62,7 @@ function Login() {
                 />
                 <button type="submit">Log in</button>
             </form>
+            <button onClick={handleTest}></button>
         </div>
     )
 }

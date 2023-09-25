@@ -4,6 +4,8 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import './custom.css';
+import { AuthProvider } from './components/AuthContext';
+
 function App() {
     /*
     useEffect(() => {
@@ -25,13 +27,15 @@ function App() {
     */
     return (
         <div>
-            <Navbar/>
-            <Routes>
-                <Route index element={<Home />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/about" element={<h3>About</h3>} />
-                <Route path="/login" element={<Login />} />
-            </Routes>
+            <AuthProvider>
+                <Navbar />
+                <Routes>
+                    <Route index element={<Home />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/about" element={<h3>About</h3>} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </AuthProvider>
         </div>
     );
 }
