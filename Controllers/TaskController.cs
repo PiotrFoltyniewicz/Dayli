@@ -12,13 +12,13 @@ namespace BetterDay.Controllers
     public class TaskController : ControllerBase
     {
 
-        // GET: api/task/today
+        // GET: api/task
         [HttpGet]
-        [Route("today")]
-        public ActionResult<TaskModel> GetTodaysTask()
+        public async Task<IEnumerable<TaskModel>> GetTodaysTask()
         {
-
-            return new TaskModel(DateTime.Now, "Mow the lawn", 0);
+            // for easier testing !!!!!
+            return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
+            //return await TaskModel.GetTodaysTask(TokenHandler.GetCurrentUser(User.Claims));
         }
 
         // GET api/task/5
