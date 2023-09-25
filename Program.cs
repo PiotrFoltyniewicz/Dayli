@@ -34,6 +34,8 @@ namespace BetterDay
             });
 
             builder.Services.AddAuthorization();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -56,6 +58,8 @@ namespace BetterDay
             app.MapControllers();
 
             app.MapFallbackToFile("index.html");
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.Run();
         }

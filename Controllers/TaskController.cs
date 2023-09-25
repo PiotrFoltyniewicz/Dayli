@@ -14,13 +14,21 @@ namespace BetterDay.Controllers
 
         // GET: api/task
         [HttpGet]
+        [Route("today")]
         public async Task<IEnumerable<TaskModel>> GetTodaysTask()
         {
-            // for easier testing !!!!!
-            return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
-            //return await TaskModel.GetTodaysTask(TokenHandler.GetCurrentUser(User.Claims));
+            //return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
+            return await TaskModel.GetTodaysTask(TokenHandler.GetCurrentUser(User.Claims));
         }
 
+        [HttpGet]
+        [Route("all")]
+        public async Task<IEnumerable<TaskModel>> GetAllTasks()
+        {
+            return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
+        }
+
+        /*
         // GET api/task/5
         [HttpGet("{id}")]
         public string Get(int id)
@@ -36,7 +44,7 @@ namespace BetterDay.Controllers
 
         // PUT api/<TaskController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void (int id, [FromBody] string value)
         {
         }
 
@@ -45,5 +53,6 @@ namespace BetterDay.Controllers
         public void Delete(int id)
         {
         }
+        */
     }
 }

@@ -11,12 +11,12 @@ namespace BetterDay.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserLoginController : ControllerBase
+    public class UserController : ControllerBase
     {
         private IConfiguration configuration;
         private ILogger logger;
 
-        public UserLoginController(IConfiguration configuration)
+        public UserController(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
@@ -24,6 +24,7 @@ namespace BetterDay.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> LoginUser([FromBody] UserModel user)
         {
             if(user != null)
@@ -60,6 +61,19 @@ namespace BetterDay.Controllers
                 }
             }
             return Unauthorized();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserModel user)
+        {
+            if (user.Username == null || user.Password == null)
+            {
+                return new JsonResult(new ApiError(400, "Username or password is null"));
+            }
+            var result = await UserModel.CreateUser(user);
+            return new JsonResult(result);
         }
     }
 }
