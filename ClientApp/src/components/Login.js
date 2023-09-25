@@ -4,7 +4,8 @@ import { useAuth } from './AuthContext';
 
 function Login() {
     const [pass, setPass] = useState({ username: "", password: "" })
-    const token = useAuth().token
+    const { token, login, logout } = useAuth();
+
     function handleChange(event) {
         const { name, value } = event.target
         setPass(prevPass => ({ ...prevPass, [name]: value }))
@@ -24,20 +25,22 @@ function Login() {
         if (response.ok) {
             const data = await response.text(); 
             const jwtToken = data; 
-            sessionStorage.setItem('jwtToken', data);
-
+            login(jwtToken)
             console.log("JWT Token:", jwtToken);
         } else {
             console.error('Login failed');
         }
 
     }
+    function handleLogOut() {
+        logout();
+    }
     function handleTest() {
-        console.log(token)
+        console.log(token);
     }
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            {token === "" && <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     id="username"
@@ -61,8 +64,9 @@ function Login() {
                     onChange={handleChange}
                 />
                 <button type="submit">Log in</button>
-            </form>
-            <button onClick={handleTest}></button>
+            </form>}
+            {token && <button onClick={handleLogOut}>Log out</button>}
+            <button onClick={handleTest}>Console log token</button>
         </div>
     )
 }
