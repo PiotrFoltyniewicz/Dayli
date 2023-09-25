@@ -1,7 +1,10 @@
 import React, { Link } from "react"
 import betterDayLogo from "../images/betterDayLogo.png"
+import { useAuth } from './AuthContext';
+
 function Navbar()
 {
+    const { token } = useAuth();
     return (
         <nav className="navbar">
             <a className="navbar--name" href="/">
@@ -16,7 +19,7 @@ function Navbar()
                     <a href="/about">About</a>
                 </li>
                 <li>
-                    <a href="/login">Profile</a>
+                    <a href="/profile">{token ? "Profile" : "Log in"}</a>
                 </li>
             </ul>
         </nav>

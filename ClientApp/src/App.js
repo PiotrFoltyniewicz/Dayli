@@ -33,7 +33,7 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/about" element={<h3>About</h3>} />
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/profile" element={<Login />} />
                 </Routes>
             </AuthProvider>
         </div>
