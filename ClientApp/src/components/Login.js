@@ -39,9 +39,9 @@ function Login() {
         console.log(token);
     }
     return (
-        <div>
-            {token === "" && <form onSubmit={handleSubmit}>
-                <input
+        <section className="profile">
+            {token === "" && <form className="login--form" onSubmit={handleSubmit}>
+                <div className="inputWrapper"><input
                     type="text"
                     id="username"
                     placeholder="Username"
@@ -62,12 +62,12 @@ function Login() {
                     required
                     value={pass.password}
                     onChange={handleChange}
-                />
+                    /></div>
                 <button type="submit">Log in</button>
             </form>}
             {token && <button onClick={handleLogOut}>Log out</button>}
             <button onClick={handleTest}>Console log token</button>
-        </div>
+        </section>
     )
 }
 export default Login;
