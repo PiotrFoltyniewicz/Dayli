@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BetterDay.Models;
 using Microsoft.AspNetCore.Authorization;
+using BetterDay.Errors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,47 +13,50 @@ namespace BetterDay.Controllers
     public class TaskController : ControllerBase
     {
 
-        // GET: api/task
-        [HttpGet]
-        [Route("today")]
-        public async Task<IEnumerable<TaskModel>> GetTodaysTask()
+        [HttpGet("today")]
+        public async Task<IEnumerable<TaskModel>> GetTodaysTasks()
         {
-            //return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
-            return await TaskModel.GetTodaysTask(TokenHandler.GetCurrentUser(User.Claims));
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await TaskModel.GetTodaysTasks(currUser);
         }
 
-        [HttpGet]
-        [Route("all")]
+        [HttpGet("all")]
         public async Task<IEnumerable<TaskModel>> GetAllTasks()
         {
-            return await TaskModel.GetAllUserTasks(TokenHandler.GetCurrentUser(User.Claims));
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await TaskModel.GetAllUserTasks(currUser);
         }
 
-        /*
-        // GET api/task/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{date}")]
+        public async Task<IEnumerable<TaskModel>> GetTasksByDate(DateTime date)
         {
-            return "value";
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await TaskModel.GetTasksByDate(currUser, date);
         }
 
-        // POST api/<TaskController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPut("create")]
+        public async Task<IActionResult> CreateTask([FromBody] TaskModel task)
         {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            var result = await TaskModel.CreateTask(currUser, task);
+            return new JsonResult(result);
         }
 
-        // PUT api/<TaskController>/5
-        [HttpPut("{id}")]
-        public void (int id, [FromBody] string value)
+        [HttpPost("update/{id}")]
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskModel task)
         {
+            task.Id = id;
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            var result = await TaskModel.UpdateTask(currUser, task);
+            return new JsonResult(result);
         }
 
-        // DELETE api/<TaskController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
         {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            var result = await TaskModel.DeleteTask(currUser, id);
+            return new JsonResult(result);
         }
-        */
     }
 }

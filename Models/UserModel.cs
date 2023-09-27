@@ -1,12 +1,6 @@
 ﻿using MySqlConnector;
 using BetterDay.Errors;
-using Microsoft.AspNetCore.Mvc;
-using BetterDay.Models;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace BetterDay.Models
 {
@@ -14,7 +8,7 @@ namespace BetterDay.Models
     {
         public string Username { get; private set; }
         public string Password { get; private set; }
-
+        [JsonConstructor]
         public UserModel(string username, string password)
         {
             Username = username;
@@ -30,6 +24,7 @@ namespace BetterDay.Models
             var reader = await query.ExecuteReaderAsync();
             if (reader.HasRows)
             {
+                await reader.CloseAsync();
                 await connection.CloseAsync();
                 return new ApiError(422, "User already exists");
             }

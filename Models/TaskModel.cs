@@ -18,6 +18,7 @@ namespace BetterDay.Models
             Title = title;
             Status = status;
         }
+        /*
         [JsonConstructor]
         public TaskModel(DateTime? date, string title, bool status)
         {
@@ -25,7 +26,7 @@ namespace BetterDay.Models
             Title = title;
             Status = status;
         }
-
+        */
         public async static Task<IEnumerable<TaskModel>> GetAllUserTasks(string username)
         {
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
@@ -79,7 +80,7 @@ namespace BetterDay.Models
                                             FROM tasks AS t
                                             INNER JOIN users AS u
                                             ON t.UserID = u.ID
-                                            WHERE u.Username = '{username}' AND DATE(Date) = '{date}';", connection);
+                                            WHERE u.Username = '{username}' AND DATE(Date) = '{date.ToString("yyyy-MM-dd")}';", connection);
             var reader = await query.ExecuteReaderAsync();
 
             List<TaskModel> tasks = new List<TaskModel>();
@@ -101,8 +102,8 @@ namespace BetterDay.Models
             task.Date ??= DateTime.Now;
 
             var query = new MySqlCommand(@$"INSERT INTO tasks (UserID, Date, Title, Status)
-                                            VALUES ({GetUserId(username)},
-                                                    '{task.Date}',
+                                            VALUES ({GetUserId(username).Result},
+                                                    '{task.Date.Value.ToString("yyyy-MM-dd")}',
                                                     '{task.Title}',
                                                     false);", connection);
             var reader = await query.ExecuteReaderAsync();
@@ -126,8 +127,8 @@ namespace BetterDay.Models
             await connection.OpenAsync();
 
             var query = new MySqlCommand(@$"UPDATE tasks
-                                            SET Date = '{task.Date}', Title = '{task.Title}', Status = {task.Status}
-                                            WHERE Id = {task.Id} AND UserId = {GetUserId(username)};", connection);
+                                            SET Date = '{task.Date.Value.ToString("yyyy-MM-dd")}', Title = '{task.Title}', Status = {task.Status}
+                                            WHERE ID = {task.Id} AND UserId = {GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
@@ -149,7 +150,7 @@ namespace BetterDay.Models
             await connection.OpenAsync();
 
             var query = new MySqlCommand(@$"DELETE FROM tasks
-                                            WHERE Id = {id} AND UserId = {GetUserId(username)}", connection);
+                                            WHERE ID = {id} AND UserId = {GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
@@ -169,16 +170,16 @@ namespace BetterDay.Models
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"SELECT Id
+            var query = new MySqlCommand(@$"SELECT ID
                                             FROM users
-                                            WHERE Username = '{username}'", connection);
+                                            WHERE Username = '{username}';", connection);
             var reader = await query.ExecuteReaderAsync();
             
             await reader.ReadAsync();
-            int? userId = (int?)reader[0];
+            int userId = (int)reader[0];
             await reader.CloseAsync();
             await connection.CloseAsync();
-            return userId.Value;
+            return userId;
         }
     }
 }

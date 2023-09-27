@@ -31,33 +31,8 @@ namespace BetterDay.Controllers
             {
                 if (await UserModel.LoginUser(user))
                 {
-                    var issuer = configuration["Jwt:Issuer"];
-                    var audience = configuration["Jwt:Audience"];
-                    var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
-                    var signingCredentials = new SigningCredentials(
-                        new SymmetricSecurityKey(key),
-                        SecurityAlgorithms.HmacSha256Signature);
-
-                    var subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, configuration["JWT:Subject"]),
-                        new Claim("Username", user.Username)
-                    });
-
-                    var expires = DateTime.UtcNow.AddMinutes(10);
-
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = subject,
-                        Expires = expires,
-                        Issuer = issuer,
-                        Audience = audience,
-                        SigningCredentials = signingCredentials,
-                    };
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-                    var jwtToken = tokenHandler.WriteToken(token);
-                    return Ok(jwtToken);
+                    string token = CreateToken(user.Username);
+                    return Ok(token);
                 }
             }
             return Unauthorized();
@@ -75,5 +50,38 @@ namespace BetterDay.Controllers
             var result = await UserModel.CreateUser(user);
             return new JsonResult(result);
         }
+
+        private string CreateToken(string username, bool refresh = false)
+        {
+            var issuer = configuration["Jwt:Issuer"];
+            var audience = configuration["Jwt:Audience"];
+            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
+            var signingCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature);
+
+            var subject = new ClaimsIdentity(new[]
+            {
+                        new Claim(JwtRegisteredClaimNames.Sub, configuration["JWT:Subject"]),
+                        new Claim("Username", username)
+                    });
+
+            var expires = DateTime.UtcNow.AddDays(1);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = subject,
+                Expires = expires,
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = signingCredentials,
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = tokenHandler.WriteToken(token);
+
+            return jwtToken;
+        }
+
     }
 }
