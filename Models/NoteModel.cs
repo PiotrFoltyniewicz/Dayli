@@ -4,161 +4,150 @@ using Newtonsoft.Json;
 
 namespace BetterDay.Models
 {
-    public class TaskModel
+    public class NoteModel
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }
-        public string Title { get; set; }
-        public bool Status { get; set; }
+        public string Note { get; set; }
         [JsonConstructor]
-        public TaskModel(int id, DateTime? date, string title, bool status)
+        public NoteModel(int id, DateTime? date, string note)
         {
             Id = id;
             Date = date;
-            Title = title;
-            Status = status;
+            Note = note;
         }
-        /*
-        [JsonConstructor]
-        public TaskModel(DateTime? date, string title, bool status)
-        {
-            Date = date;
-            Title = title;
-            Status = status;
-        }
-        */
-        public async static Task<IEnumerable<TaskModel>> GetAllUserTasks(string username)
+
+        public async static Task<IEnumerable<NoteModel>> GetAllUserNotes(string username)
         {
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"SELECT t.Id, t.Date, t.Title, t.Status
-                                            FROM tasks AS t
+            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Note
+                                            FROM notes AS n
                                             INNER JOIN users AS u
-                                            ON t.UserID = u.ID
+                                            ON n.UserID = u.ID
                                             WHERE u.Username = '{username}';", connection);
             var reader = await query.ExecuteReaderAsync();
 
-            List<TaskModel> tasks = new List<TaskModel>();
+            List<NoteModel> notes = new List<NoteModel>();
             while (await reader.ReadAsync())
             {
-                tasks.Add(new TaskModel((int)reader[0], (DateTime)reader[1], (string)reader[2], (bool)reader[3]));
+                notes.Add(new NoteModel((int)reader[0], (DateTime)reader[1], (string)reader[2]));
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
-            return tasks;
+            return notes;
         }
 
-        public async static Task<IEnumerable<TaskModel>> GetTodaysTasks(string username)
+        public async static Task<IEnumerable<NoteModel>> GetTodaysNotes(string username)
         {
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"SELECT t.Id, t.Date, t.Title, t.Status
-                                            FROM tasks AS t
+            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Note
+                                            FROM notes AS n
                                             INNER JOIN users AS u
-                                            ON t.UserID = u.ID
+                                            ON n.UserID = u.ID
                                             WHERE u.Username = '{username}' AND DATE(Date) = CURDATE();", connection);
             var reader = await query.ExecuteReaderAsync();
 
-            List<TaskModel> tasks = new List<TaskModel>();
-            while(await reader.ReadAsync())
+            List<NoteModel> notes = new List<NoteModel>();
+            while (await reader.ReadAsync())
             {
-                tasks.Add(new TaskModel((int)reader[0], (DateTime)reader[1], (string)reader[2], (bool)reader[3]));
+                notes.Add(new NoteModel((int)reader[0], (DateTime)reader[1], (string)reader[2]));
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
-            return tasks;
+            return notes;
         }
 
-        public async static Task<IEnumerable<TaskModel>> GetTasksByDate(string username, DateTime date)
+        public async static Task<IEnumerable<NoteModel>> GetNotesByDate(string username, DateTime date)
         {
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"SELECT t.Id, t.Date, t.Title, t.Status
-                                            FROM tasks AS t
+            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Title, n.Status
+                                            FROM notes AS n
                                             INNER JOIN users AS u
-                                            ON t.UserID = u.ID
+                                            ON n.UserID = u.ID
                                             WHERE u.Username = '{username}' AND DATE(Date) = '{date.ToString("yyyy-MM-dd")}';", connection);
             var reader = await query.ExecuteReaderAsync();
 
-            List<TaskModel> tasks = new List<TaskModel>();
+            List<NoteModel> notes = new List<NoteModel>();
             while (await reader.ReadAsync())
             {
-                tasks.Add(new TaskModel((int)reader[0], (DateTime)reader[1], (string)reader[2], (bool)reader[3]));
+                notes.Add(new NoteModel((int)reader[0], (DateTime)reader[1], (string)reader[2]));
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
-            return tasks;
+            return notes;
         }
 
-        public async static Task<ApiError> CreateTask(string username, TaskModel task)
+        public async static Task<ApiError> CreateNote(string username, NoteModel note)
         {
             ApiError response;
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            task.Date ??= DateTime.Now;
+            note.Date ??= DateTime.Now;
 
-            var query = new MySqlCommand(@$"INSERT INTO tasks (UserID, Date, Title, Status)
+            var query = new MySqlCommand(@$"INSERT INTO notes (UserID, Date, Note)
                                             VALUES ({TokenHandler.GetUserId(username).Result},
-                                                    '{task.Date.Value.ToString("yyyy-MM-dd")}',
-                                                    '{task.Title}',
-                                                    false);", connection);
-            var reader = await query.ExecuteReaderAsync();
-            if(reader.RecordsAffected == 0)
-            {
-                response = new ApiError(444, "Task not created");
-            }
-            else
-            {
-                response = new ApiError(200, "Task successfully created");
-            }
-            await reader.CloseAsync();
-            await connection.CloseAsync();
-            return response;
-        }
-
-        public async static Task<ApiError> UpdateTask(string username, TaskModel task)
-        {
-            ApiError response;
-            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
-            await connection.OpenAsync();
-
-            var query = new MySqlCommand(@$"UPDATE tasks
-                                            SET Date = '{task.Date.Value.ToString("yyyy-MM-dd")}', Title = '{task.Title}', Status = {task.Status}
-                                            WHERE ID = {task.Id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
+                                                    '{note.Date.Value.ToString("yyyy-MM-dd")}',
+                                                    '{note.Note}');", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
-                response = new ApiError(444, "Task not updated");
+                response = new ApiError(444, "Note not created");
             }
             else
             {
-                response = new ApiError(200, "Task successfully updated");
+                response = new ApiError(200, "Note successfully created");
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
             return response;
         }
 
-        public async static Task<ApiError> DeleteTask(string username, int id)
+        public async static Task<ApiError> UpdateNote(string username, NoteModel note)
         {
             ApiError response;
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"DELETE FROM tasks
+            var query = new MySqlCommand(@$"UPDATE notes
+                                            SET Date = '{note.Date.Value.ToString("yyyy-MM-dd")}', Note = '{note.Note}'
+                                            WHERE ID = {note.Id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
+            var reader = await query.ExecuteReaderAsync();
+            if (reader.RecordsAffected == 0)
+            {
+                response = new ApiError(444, "Note not updated");
+            }
+            else
+            {
+                response = new ApiError(200, "Note successfully updated");
+            }
+            await reader.CloseAsync();
+            await connection.CloseAsync();
+            return response;
+        }
+
+        public async static Task<ApiError> DeleteNote(string username, int id)
+        {
+            ApiError response;
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+
+            var query = new MySqlCommand(@$"DELETE FROM notes
                                             WHERE ID = {id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
-                response = new ApiError(444, "Task not deleted");
+                response = new ApiError(444, "Note not deleted");
             }
             else
             {
-                response = new ApiError(200, "Task successfully deleted");
+                response = new ApiError(200, "Note successfully deleted");
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
