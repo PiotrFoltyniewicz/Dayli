@@ -102,7 +102,7 @@ namespace BetterDay.Models
             task.Date ??= DateTime.Now;
 
             var query = new MySqlCommand(@$"INSERT INTO tasks (UserID, Date, Title, Status)
-                                            VALUES ({GetUserId(username).Result},
+                                            VALUES ({TokenHandler.GetUserId(username).Result},
                                                     '{task.Date.Value.ToString("yyyy-MM-dd")}',
                                                     '{task.Title}',
                                                     false);", connection);
@@ -128,7 +128,7 @@ namespace BetterDay.Models
 
             var query = new MySqlCommand(@$"UPDATE tasks
                                             SET Date = '{task.Date.Value.ToString("yyyy-MM-dd")}', Title = '{task.Title}', Status = {task.Status}
-                                            WHERE ID = {task.Id} AND UserId = {GetUserId(username).Result};", connection);
+                                            WHERE ID = {task.Id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
@@ -150,7 +150,7 @@ namespace BetterDay.Models
             await connection.OpenAsync();
 
             var query = new MySqlCommand(@$"DELETE FROM tasks
-                                            WHERE ID = {id} AND UserId = {GetUserId(username).Result};", connection);
+                                            WHERE ID = {id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
@@ -163,23 +163,6 @@ namespace BetterDay.Models
             await reader.CloseAsync();
             await connection.CloseAsync();
             return response;
-        }
-
-        private static async Task<int> GetUserId(string username)
-        {
-            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
-            await connection.OpenAsync();
-
-            var query = new MySqlCommand(@$"SELECT ID
-                                            FROM users
-                                            WHERE Username = '{username}';", connection);
-            var reader = await query.ExecuteReaderAsync();
-            
-            await reader.ReadAsync();
-            int userId = (int)reader[0];
-            await reader.CloseAsync();
-            await connection.CloseAsync();
-            return userId;
         }
     }
 }
