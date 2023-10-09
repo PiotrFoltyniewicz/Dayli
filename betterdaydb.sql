@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 19 Wrz 2023, 21:44
+-- Czas generowania: 09 Paź 2023, 10:09
 -- Wersja serwera: 10.4.24-MariaDB
 -- Wersja PHP: 7.4.29
 
@@ -24,28 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `habitgroups`
+--
+
+CREATE TABLE `habitgroups` (
+  `ID` int(11) NOT NULL,
+  `Date` date NOT NULL,
+  `UserId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `habits`
 --
 
 CREATE TABLE `habits` (
   `ID` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
-  `Date` date NOT NULL DEFAULT current_timestamp(),
   `HabitID` int(11) DEFAULT NULL,
+  `GroupId` int(11) NOT NULL,
   `Status` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Zrzut danych tabeli `habits`
---
-
-INSERT INTO `habits` (`ID`, `UserID`, `Date`, `HabitID`, `Status`) VALUES
-(1, 1, '2023-09-19', 1, 0),
-(2, 1, '2023-09-19', 2, 1),
-(3, 1, '2023-09-19', 3, 0),
-(4, 1, '2023-09-20', 1, 0),
-(5, 1, '2023-09-20', 2, 0),
-(6, 1, '2023-09-20', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -136,12 +136,20 @@ INSERT INTO `users` (`ID`, `Username`, `Password`) VALUES
 --
 
 --
+-- Indeksy dla tabeli `habitgroups`
+--
+ALTER TABLE `habitgroups`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `UserId` (`UserId`);
+
+--
 -- Indeksy dla tabeli `habits`
 --
 ALTER TABLE `habits`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `HabitID` (`HabitID`),
-  ADD KEY `UserID` (`UserID`);
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `GroupId` (`GroupId`);
 
 --
 -- Indeksy dla tabeli `habitslist`
@@ -173,6 +181,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT dla zrzuconych tabel
 --
+
+--
+-- AUTO_INCREMENT dla tabeli `habitgroups`
+--
+ALTER TABLE `habitgroups`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `habits`
@@ -209,11 +223,18 @@ ALTER TABLE `users`
 --
 
 --
+-- Ograniczenia dla tabeli `habitgroups`
+--
+ALTER TABLE `habitgroups`
+  ADD CONSTRAINT `habitgroups_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`ID`);
+
+--
 -- Ograniczenia dla tabeli `habits`
 --
 ALTER TABLE `habits`
   ADD CONSTRAINT `habits_ibfk_1` FOREIGN KEY (`HabitID`) REFERENCES `habitslist` (`ID`),
-  ADD CONSTRAINT `habits_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`);
+  ADD CONSTRAINT `habits_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`),
+  ADD CONSTRAINT `habits_ibfk_3` FOREIGN KEY (`GroupId`) REFERENCES `habitgroups` (`Id`);
 
 --
 -- Ograniczenia dla tabeli `habitslist`
