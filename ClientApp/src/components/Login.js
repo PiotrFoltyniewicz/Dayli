@@ -27,6 +27,7 @@ function Login() {
             const jwtToken = data; 
             login(jwtToken)
             console.log("JWT Token:", jwtToken);
+            setPass({ username: "", password: "" });
         } else {
             console.error('Login failed');
         }
@@ -41,28 +42,38 @@ function Login() {
     return (
         <section className="profile">
             {token === "" && <form className="login--form" onSubmit={handleSubmit}>
-                <div className="inputWrapper"><input
+                <div className="inputWrapper"><div><input
                     type="text"
                     id="username"
-                    placeholder="Username"
-                    className="Login--username"
+                    className="Login--username login--input"
                     name="username"
                     autoComplete="username"
                     required
                     value={pass.username}
                     onChange={handleChange}
                 />
+                    <label
+                        for="username"
+                        className="username--label login--label">
+                        Username
+                    </label>
+                </div>
+                    <div>
                 <input
                     type="password"
                     id="password"
-                    placeholder="password"
-                    className="Login--password"
+                    className="Login--password login--input"
                     name="password"
                     autoComplete="current-password"
                     required
                     value={pass.password}
                     onChange={handleChange}
-                    /></div>
+                    />
+                    <label
+                        for="password"
+                        className="password--label login--label">
+                        Password
+                        </label>                </div></div>
                 <button type="submit">Log in</button>
             </form>}
             {token && <button onClick={handleLogOut}>Log out</button>}
