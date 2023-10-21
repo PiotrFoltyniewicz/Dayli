@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import './custom.css';
 import { AuthProvider } from './contexts/AuthContext';
+import "inter-ui/inter.css";
 
 function App() {
     /*

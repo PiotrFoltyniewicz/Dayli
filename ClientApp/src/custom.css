@@ -1,4 +1,13 @@
-/* Provide sufficient contrast against white background */
+
+* {
+    font-family: "Inter", "system-ui";
+}
+
+@supports (font-variation-settings: normal) {
+    * {
+        font-family: "Inter var", "system-ui";
+    }
+}
 a {
     color: #0366d6;
 }
@@ -135,4 +144,5 @@ body {
     .visible {
         display:flex;
     }
+
 }
