@@ -53,7 +53,7 @@ function Login() {
                     onChange={handleChange}
                 />
                     <label
-                        for="username"
+                        htmlFor="username"
                         className="username--label login--label">
                         Username
                     </label>
@@ -70,7 +70,7 @@ function Login() {
                     onChange={handleChange}
                     />
                     <label
-                        for="password"
+                        htmlFor="password"
                         className="password--label login--label">
                         Password
                         </label>                </div></div>

@@ -1,4 +1,4 @@
-
+/* Font family settings */
 * {
     font-family: "Inter", "system-ui";
 }
@@ -8,6 +8,8 @@
         font-family: "Inter var", "system-ui";
     }
 }
+
+/* Global styling */
 a {
     color: #0366d6;
 }
@@ -16,12 +18,14 @@ code {
     color: #E01A76;
 }
 
+/* Primary button styling */
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
 
+/* Body and Header styles */
 body {
     margin: 0;
 }
@@ -33,32 +37,34 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 16px;
-    height:15%;
+    height: 15%;
 }
 
-.navbar--top {
+/* Navbar styles */
+.navbar {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     color: white;
 }
+
 .navbar--name {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    font-size: 32px;
 }
 
 .header img {
     height: 48px;
 }
+
 .navbar ul {
     display: flex;
     gap: 16px;
     list-style: none;
     padding: 0;
     margin: 0;
-}
-
-.navbar--name {
-    font-size: 32px;
 }
 
 .navbar a, .header a {
@@ -70,7 +76,7 @@ body {
 .navbar li > a {
     font-size: larger;
     border-radius: 15px;
-    width:100%;
+    width: 100%;
 }
 
     .navbar li > a:hover {
@@ -78,11 +84,12 @@ body {
     }
 
 .navbar--control {
-    display:none;
+    display: none;
 }
 
+/* Input styles */
 .inputWrapper {
-    margin-top:15px;
+    margin-top: 15px;
 }
 
 .login--input {
@@ -91,37 +98,38 @@ body {
     background: none;
     padding: 1rem;
     font-size: 1rem;
-    transition: border 150ms cubic-bezier(0.4,0,0.2,1);
+    transition: border 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.login--input:focus, .login--input:valid {
-    outline:none;
-    border:1.5px solid #1a73e8;
-}
+    .login--input:focus, .login--input:valid {
+        outline: none;
+        border: 1.5px solid #1a73e8;
+    }
 
- .login--input:valid ~ label {
-    transform: translateY(-50%) scale(0.7);
-    background-color: white;
-    padding: 0 .2em;
-    color:#2196f3;
-}
+        .login--input:valid ~ label {
+            transform: translateY(-50%) scale(0.7);
+            background-color: white;
+            padding: 0 .2em;
+            color: #2196f3;
+        }
 
 .login--label {
     position: absolute;
     left: 15px;
-    color:gray;
+    color: gray;
     pointer-events: none;
     transform: translateY(1rem);
-    transition: 150ms cubic-bezier(0.4,0,0.2,1);
+    transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
+/* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {
         display: block;
         height: auto;
         padding: 5px;
     }
+
         .navbar > * {
             display: block;
         }
@@ -139,8 +147,8 @@ body {
         height: 40px;
         flex-direction: column;
         justify-content: space-around;
-        background:inherit;
-        border:none;
+        background: inherit;
+        border: none;
     }
 
         .navbar--control * {
@@ -153,22 +161,23 @@ body {
     .navbar {
         display: none;
         width: 30%;
-        position:fixed;
-        top:16%;
-        right:1px;
-        justify-content:center;
-        align-items:center;
-        background-color:gray;
-        opacity:1;
-        border-radius:2px;
+        position: fixed;
+        top: 16%;
+        right: 1px;
+        justify-content: center;
+        align-items: center;
+        background-color: gray;
+        opacity: 1;
+        border-radius: 2px;
     }
+
         .navbar ul {
             display: flex;
             flex-direction: column;
             width: 100%;
             justify-content: center;
             align-items: center;
-            padding: 0; 
+            padding: 0;
         }
 
         .navbar li,
@@ -181,8 +190,8 @@ body {
             .navbar li:hover {
                 color: dimgray;
             }
-    .visible {
-        display:flex;
-    }
 
+    .visible {
+        display: flex;
+    }
 }
