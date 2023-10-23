@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
+import LoremIpsum from './components/LoremIpsum';
 import './custom.css';
 import { AuthProvider } from './contexts/AuthContext';
 import "inter-ui/inter.css";
@@ -27,7 +28,7 @@ function App() {
     }
     */
     return (
-        <div>
+        <div className="App">
             <AuthProvider>
                 <Navbar />
                 <Routes>
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/about" element={<h3>About</h3>} />
                     <Route path="/profile" element={<Login />} />
                 </Routes>
+                <LoremIpsum/>
             </AuthProvider>
         </div>
     );

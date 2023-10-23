@@ -17,6 +17,10 @@ a {
 code {
     color: #E01A76;
 }
+.App {
+    display:flex;
+    flex-direction:column;
+}
 
 /* Primary button styling */
 .btn-primary {
@@ -120,6 +124,20 @@ body {
     pointer-events: none;
     transform: translateY(1rem);
     transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.login--form {
+    width:256px;
+}
+
+#profile {
+    position: sticky !important;
+    z-index: 100;
+    top:50%;
+    align-self: center !important;
+    background: white;
+    padding:10px;
+    border-radius:1rem;
+    border:2px solid gray;
 }
 
 /* Responsive design */

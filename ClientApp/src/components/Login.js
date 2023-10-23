@@ -40,7 +40,7 @@ function Login() {
         console.log(token);
     }
     return (
-        <section className="profile">
+        <div className="profile" id="profile">
             {token === "" && <form className="login--form" onSubmit={handleSubmit}>
                 <div className="inputWrapper"><div><input
                     type="text"
@@ -78,7 +78,7 @@ function Login() {
             </form>}
             {token && <button onClick={handleLogOut}>Log out</button>}
             <button onClick={handleTest}>Console log token</button>
-        </section>
+        </div>
     )
 }
 export default Login;
