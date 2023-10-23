@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
     const [pass, setPass] = useState({ username: "", password: "" })
-    const { token, login, logout } = useAuth();
+    const { token, login} = useAuth();
 
     function handleChange(event) {
         const { name, value } = event.target
@@ -32,12 +32,6 @@ function Login() {
             console.error('Login failed');
         }
 
-    }
-    function handleLogOut() {
-        logout();
-    }
-    function handleTest() {
-        console.log(token);
     }
     return (
         <div className="profile" id="profile">
@@ -76,8 +70,6 @@ function Login() {
                         </label>                </div></div>
                 <button type="submit">Log in</button>
             </form>}
-            {token && <button onClick={handleLogOut}>Log out</button>}
-            <button onClick={handleTest}>Console log token</button>
         </div>
     )
 }

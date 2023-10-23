@@ -17,10 +17,7 @@ a {
 code {
     color: #E01A76;
 }
-.App {
-    display:flex;
-    flex-direction:column;
-}
+
 
 /* Primary button styling */
 .btn-primary {
@@ -71,19 +68,25 @@ body {
     margin: 0;
 }
 
-.navbar a, .header a {
+.navbar a, .header a, .navbar--right--element {
     color: inherit;
     text-decoration: none;
     padding: 10px;
 }
-
-.navbar li > a {
-    font-size: larger;
-    border-radius: 15px;
-    width: 100%;
+.navbar--right {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 }
 
-    .navbar li > a:hover {
+.navbar--right--element {
+    font-size: larger;
+    border-radius: 15px;
+    width: inherit;
+    cursor:pointer;
+}
+
+    .navbar--right--element:hover {
         background-color: lightgray;
     }
 
@@ -130,14 +133,15 @@ body {
 }
 
 #profile {
-    position: sticky !important;
+    position: fixed;
     z-index: 100;
-    top:50%;
-    align-self: center !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: white;
-    padding:10px;
-    border-radius:1rem;
-    border:2px solid gray;
+    padding: 15px;
+    border-radius: 1rem;
+    border: 2px solid gray;
 }
 
 /* Responsive design */
@@ -180,7 +184,7 @@ body {
         display: none;
         width: 30%;
         position: fixed;
-        top: 16%;
+        top: 12.5%;
         right: 1px;
         justify-content: center;
         align-items: center;
@@ -199,7 +203,7 @@ body {
         }
 
         .navbar li,
-        .navbar a {
+        .navbar a, .navbar--right--element {
             width: 100%;
             text-align: center;
             padding: 10px;
@@ -208,7 +212,6 @@ body {
             .navbar li:hover {
                 color: dimgray;
             }
-
     .visible {
         display: flex;
     }

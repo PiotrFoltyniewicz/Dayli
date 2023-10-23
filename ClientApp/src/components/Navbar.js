@@ -2,11 +2,14 @@ import React, {useRef} from "react"
 import betterDayLogo from "../images/betterDayLogo.png"
 import { useAuth } from '../contexts/AuthContext';
 
-function Navbar() {
+function Navbar(props) {
     const { token } = useAuth();
     const navbarRef = useRef();
     const showNavbar = () => {
         navbarRef.current.classList.toggle("visible")
+    }
+    const handleLogInClick = () => {
+        props.setLogPopUp(prev => !prev) 
     }
     return (
         <header className="header">
@@ -25,13 +28,32 @@ function Navbar() {
             <nav className="navbar" ref={navbarRef}>
                 <ul className="navbar--right" >
                     <li>
-                        <a href="/home">Home</a>
+                        <a
+                            className="navbar--right--element"
+                            href="/home">Home
+                        </a>
                     </li>
                     <li>
-                        <a href="/about">About</a>
+                        <a
+                            className="navbar--right--element"
+                            href="/about">About
+                        </a>
                     </li>
                     <li>
-                        <a href="/profile">{token ? "Profile" : "Log in"}</a>
+                        {token ?
+                            <a
+                                className="navbar--right--element"
+                                href="/profile"
+                            >
+                                Profile
+                            </a>
+                            :
+                            <span
+
+                                className="navbar--right--element"
+                                onClick={handleLogInClick}>
+                                Log in
+                            </span>}
                     </li>
                 </ul>
             </nav>
