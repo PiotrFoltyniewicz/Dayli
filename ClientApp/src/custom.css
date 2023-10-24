@@ -38,7 +38,11 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 16px;
-    height: 15%;
+    height: 10%;
+    position: sticky;
+    width: calc(100% - 32px);
+    top: 0;
+    z-index: 100;
 }
 
 /* Navbar styles */
@@ -99,6 +103,9 @@ body {
     margin-top: 15px;
 }
 
+.login--label {
+    padding-left:1rem;
+}
 .login--input {
     border: 1.5px solid #9e9e9e;
     border-radius: 1rem;
@@ -130,6 +137,7 @@ body {
 }
 .login--form {
     width:256px;
+    margin:15px;
 }
 
 #profile {
@@ -139,7 +147,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 15px;
     border-radius: 1rem;
     border: 2px solid gray;
 }
@@ -160,6 +167,7 @@ body {
         width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items:center;
     }
 
     .navbar--control {
