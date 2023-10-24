@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
     const [pass, setPass] = useState({ username: "", password: "" })
-    const { token, login} = useAuth();
-
+    const { token, login } = useAuth();
+    const [formMethod, setFormMethod] = useState(0)
     function handleChange(event) {
         const { name, value } = event.target
         setPass(prevPass => ({ ...prevPass, [name]: value }))
@@ -23,8 +23,8 @@ function Login() {
             body: JSON.stringify({ username, password }),
         });
         if (response.ok) {
-            const data = await response.text(); 
-            const jwtToken = data; 
+            const data = await response.text();
+            const jwtToken = data;
             login(jwtToken)
             console.log("JWT Token:", jwtToken);
             setPass({ username: "", password: "" });
@@ -33,42 +33,67 @@ function Login() {
         }
 
     }
+
+    function handleMethodClick(method) {
+        setFormMethod(method);
+    }
     return (
         <div className="profile" id="profile">
             {token === "" && <form className="login--form" onSubmit={handleSubmit}>
-                <div className="inputWrapper"><div><input
-                    type="text"
-                    id="username"
-                    className="Login--username login--input"
-                    name="username"
-                    autoComplete="username"
-                    required
-                    value={pass.username}
-                    onChange={handleChange}
-                />
-                    <label
-                        htmlFor="username"
-                        className="username--label login--label">
-                        Username
-                    </label>
-                </div>
-                    <div>
-                <input
-                    type="password"
-                    id="password"
-                    className="Login--password login--input"
-                    name="password"
-                    autoComplete="current-password"
-                    required
-                    value={pass.password}
-                    onChange={handleChange}
+                <div className="inputWrapper">
+                    <h1>BetterDay</h1>
+                    <div className="login--formMethod">
+                        <button
+                            className={formMethod === 0 ? 'login--activeMethod' : ''}
+                            onClick={() => handleMethodClick(0)}
+                        >
+                            Login
+                        </button>
+                        <button
+                            className={formMethod === 1 ? 'login--activeMethod' : ''}
+                            onClick={() => handleMethodClick(1)}
+                        >
+                            New Account
+                        </button>
+                    </div>
+                    <div><input
+                        type="text"
+                        id="username"
+                        className="Login--username login--input"
+                        name="username"
+                        autoComplete="username"
+                        required
+                        value={pass.username}
+                        onChange={handleChange}
                     />
-                    <label
-                        htmlFor="password"
-                        className="password--label login--label">
-                        Password
+                        <label
+                            htmlFor="username"
+                            className="username--label login--label">
+                            Username
+                        </label>
+                    </div>
+                    <div>
+                        <input
+                            type="password"
+                            id="password"
+                            className="Login--password login--input"
+                            name="password"
+                            autoComplete="current-password"
+                            required
+                            value={pass.password}
+                            onChange={handleChange}
+                        />
+                        <label
+                            htmlFor="password"
+                            className="password--label login--label">
+                            Password
                         </label>                </div></div>
-                <button type="submit">Log in</button>
+                <button
+                    type="submit"
+                    className="login--submit"
+                >
+                    Log in
+                </button>
             </form>}
         </div>
     )

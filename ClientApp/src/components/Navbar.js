@@ -55,9 +55,9 @@ function Navbar(props) {
                                 tabIndex="0"
                                 className="navbar--right--element"
                                 onClick={handleLogInClick}
-                                onKeyPress={handleLoginEnter}
+                                onKeyDown={handleLoginEnter}
                                 ref={loginButtonRef}
-                            >
+                            >  
                                 Log in
                             </span>
                         )}
