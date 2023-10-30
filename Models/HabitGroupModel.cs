@@ -1,4 +1,6 @@
-﻿namespace BetterDay.Models
+﻿using BetterDay.Errors;
+
+namespace BetterDay.Models
 {
     public class HabitGroupModel
     {
@@ -18,5 +20,26 @@
             get { return habits[i]; }
             set { habits[i] = value; }
         }
+
+        public async static Task<IEnumerable<HabitGroupModel>> GetAllUserHabitGroups(string username)
+        {
+            return null;
+        }
+
+        public async static Task<HabitGroupModel> GetTodaysHabitGroup(string username)
+        {
+            return null;
+        }
+
+        public async static Task<HabitGroupModel> GetHabitGroupByDate(string username, DateTime date)
+        {
+            return null;
+        }
+
+        public async static Task<ApiError> CreateHabitGroupForDate(string username, DateTime date)
+        {
+            return null;
+        }
+
     }
 }
