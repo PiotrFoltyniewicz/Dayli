@@ -136,8 +136,8 @@ body {
     transform: translateY(1rem);
     transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-.login--form {
-    width:256px;
+.login--box {
+    width: calc(100%-30px);
     margin:15px;
 }
 .login--formMethod {
@@ -150,7 +150,7 @@ body {
     background:none;
     border:none;
     padding:3px;
-    margin-bottom:20px;
+    margin-bottom:10px;
 }
 .login--activeMethod {
     border-bottom:3px solid blue !important;
