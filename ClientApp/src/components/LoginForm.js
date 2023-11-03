@@ -1,36 +1,23 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { loginMethod } from "./authUtils"
 
 function LoginForm() {
     const [pass, setPass] = useState({ username: "", password: "" });
-    const { login } = useAuth();
+    const { loginToken } = useAuth();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setPass((prevPass) => ({ ...prevPass, [name]: value }));
     };
 
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault()
         const { username, password } = pass
         console.log(username, password)
 
-        const response = await fetch('/api/user/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
-        if (response.ok) {
-            const data = await response.text();
-            const jwtToken = data;
-            login(jwtToken)
-            console.log("JWT Token:", jwtToken);
-            setPass({ username: "", password: "" });
-        } else {
-            console.error('Login failed');
-        }
+        loginMethod(username, password, loginToken, setPass)
+        
     };
 
     return (

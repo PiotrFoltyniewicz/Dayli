@@ -5,23 +5,30 @@ import { useAuth } from "../contexts/AuthContext";
 
 function Login(props) {
     const [formMethod, setFormMethod] = useState(0);
+    const { token } = useAuth();
 
     const handleMethodClick = (method) => {
         setFormMethod(method);
     };
-    const { token } = useAuth();
+    const handleEscape = () => {
+        props.setLogPopUp(false);
+    }
+
 
     const isAuthenticated = !!token;
     useEffect(() => {
         if (isAuthenticated) {
             props.setLogPopUp(false);
         }
-    }, [isAuthenticated,props]);
+    }, [isAuthenticated, props]);
 
     return (
         <div className="profile" id="profile">
             <div className="login--box">
-                <h1>BetterDay</h1>
+                <div className="login--title">
+                    <h1>BetterDay</h1>
+                    <button onClick={handleEscape }>X</button>
+                </div>
                 <div className="login--formMethod">
                     <button
                         type="button"

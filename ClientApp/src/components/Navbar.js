@@ -12,6 +12,7 @@ function Navbar(props) {
 
     const handleLogInClick = () => {
         props.setLogPopUp((prev) => !prev);
+        showNavbar();
     };
 
     const handleLoginEnter = (event) => {

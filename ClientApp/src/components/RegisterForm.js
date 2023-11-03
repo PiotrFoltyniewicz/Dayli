@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { registerMethod } from "./authUtils"
 
-function LoginForm() {
-    const [pass, setPass] = useState({ username: "", password: "" });
-    const { login } = useAuth();
+function RegisterForm() {
+    const [pass, setPass] = useState({ username: "", password: "", passwordConfirm: "" });
+    const { loginToken } = useAuth();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -12,25 +13,13 @@ function LoginForm() {
 
     async function handleSubmit(event) {
         event.preventDefault()
-        const { username, password } = pass
-        console.log(username, password)
-
-        const response = await fetch('/api/user/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
-        if (response.ok) {
-            const data = await response.text();
-            const jwtToken = data;
-            login(jwtToken)
-            console.log("JWT Token:", jwtToken);
-            setPass({ username: "", password: "" });
-        } else {
-            console.error('register failed');
+        const { username, password, passwordConfirm } = pass
+        if (passwordConfirm !== password) {
+            alert("Passwords don't match")
+            return;
         }
+        console.log(username, password)
+        registerMethod(username, password, loginToken, setPass)
     };
 
     return (
@@ -57,7 +46,7 @@ function LoginForm() {
                         id="password"
                         className="Login--password login--input"
                         name="password"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         required
                         value={pass.password}
                         onChange={handleChange}
@@ -65,13 +54,28 @@ function LoginForm() {
                     <label htmlFor="password" className="password--label login--label">
                         Password
                     </label>
+                    <div>
+                        <input
+                            type="password"
+                            id="password2"
+                            className="Login--password login--input"
+                            name="passwordConfirm"
+                            autoComplete="new-password"
+                            required
+                            value={pass.passwordConfirm}
+                            onChange={handleChange}
+                        />
+                        <label htmlFor="password2" className="password--label login--label">
+                            Confirm Password
+                        </label>
+                    </div>
                 </div>
             </div>
             <button type="submit" className="login--submit">
-                Log in
+                Register
             </button>
         </form>
     );
 }
-
-export default LoginForm;
+                                                                
+export default RegisterForm;

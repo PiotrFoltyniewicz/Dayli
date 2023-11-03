@@ -1,9 +1,9 @@
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Profile() {
-    const { token, logout } = useAuth();
+    const { token, logoutToken } = useAuth();
     function handleLogOut() {
-        logout();
+        logoutToken();
     }
     function handleTest() {
         console.log(token);
