@@ -9,6 +9,13 @@ namespace BetterDay.Controllers
     [Authorize]
     public class HabitController : ControllerBase
     {
+        [HttpGet("all")]
+        public async Task<IEnumerable<HabitGroupModel>> GetAllHabits()
+        {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await HabitGroupModel.GetAllUserHabitGroups(currUser);
+        }
+
         [HttpGet("today")]
         public async Task<IActionResult> GetTodaysHabits()
         {
