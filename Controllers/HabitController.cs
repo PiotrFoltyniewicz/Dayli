@@ -17,10 +17,10 @@ namespace BetterDay.Controllers
         }
 
         [HttpGet("today")]
-        public async Task<IActionResult> GetTodaysHabits()
+        public async Task<HabitGroupModel> GetTodaysHabits()
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            return await HabitGroupModel.GetTodaysHabitGroup(currUser);
         }
 
         [HttpGet("{startDate}:{endDate}")]

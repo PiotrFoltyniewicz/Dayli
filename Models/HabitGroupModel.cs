@@ -71,7 +71,34 @@ namespace BetterDay.Models
 
         public async static Task<HabitGroupModel> GetTodaysHabitGroup(string username)
         {
-            return null;
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+
+            var query = new MySqlCommand(@$"SELECT h.GroupId, hg.Date, h.ID, hl.Title, h.Status
+                                            FROM `habits` h
+                                            INNER JOIN habitslist hl
+                                            ON hl.ID = h.HabitID
+                                            INNER JOIN habitgroups hg
+                                            ON hg.ID = h.GroupId
+                                            INNER JOIN users u
+                                            ON u.ID = h.UserID
+                                            WHERE u.Username = '{username}' AND DATE(hg.Date) = DATE(NOW());", connection);
+            var reader = await query.ExecuteReaderAsync();
+
+            List<HabitModel> habits = new List<HabitModel>();
+            int? groupId = null;
+            DateTime? date = null;
+
+            while (await reader.ReadAsync())
+            {
+                groupId ??= (int?)reader[0];
+                date ??= (DateTime?)reader[1];
+                habits.Add(new HabitModel((int)reader[2], (string)reader[3], (bool)reader[4]));
+            }
+
+            await reader.CloseAsync();
+            await connection.CloseAsync();
+            return new HabitGroupModel((int)groupId, (DateTime)date, habits);
         }
 
         public async static Task<HabitGroupModel> GetHabitGroupByDate(string username, DateTime date)
