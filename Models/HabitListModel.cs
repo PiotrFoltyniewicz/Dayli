@@ -1,13 +1,18 @@
 ﻿using MySqlConnector;
 using BetterDay.Errors;
+using Newtonsoft.Json;
 
 namespace BetterDay.Models
 {
+    public class HabitListArray
+    {
+        public HabitListModel[] array { get; set; }
+    }
     public class HabitListModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
-
+        [JsonConstructor]
         public HabitListModel(int id, string title)
         {
             Id = id;

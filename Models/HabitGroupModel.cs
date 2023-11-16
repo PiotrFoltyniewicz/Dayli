@@ -146,9 +146,36 @@ namespace BetterDay.Models
             return groups;
         }
 
-        public async static Task<ApiError> CreateHabitGroupForDate(string username, DateTime date)
+        public async static Task<ApiError> CreateHabitGroupsBetweenDates(string username, DateTime startDate, DateTime endDate, HabitListArray habits)
         {
-            return null;
+            ApiError response = new ApiError(69, "probably worked");
+
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+            
+
+            while(startDate <= endDate)
+            {
+                int userId = TokenHandler.GetUserId(username).Result;
+                var query = new MySqlCommand(@$"INSERT INTO habitgroups (Date, UserId) 
+                                                VALUES ('{startDate.ToString("yyyy-MM-dd")}', {userId});", connection);
+                var reader = await query.ExecuteReaderAsync();
+                query = new MySqlCommand($@"SELECT ID FROM habitgroups WHERE ID= LAST_INSERT_ID()", connection);
+
+                reader = await query.ExecuteReaderAsync();
+                int groupId = (int)reader[0];
+
+                foreach(HabitListModel habit in habits.array)
+                {
+                    query = new MySqlCommand(@$"INSERT INTO habits (UserId, HabitId, GroupId, Status) 
+                                            VALUES ({userId}, {habit.Id}, {groupId}, false);", connection);
+                }
+                
+                startDate.AddDays(1);
+            }
+            await connection.CloseAsync();
+
+            return response;
         }
 
     }

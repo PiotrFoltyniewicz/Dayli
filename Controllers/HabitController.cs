@@ -30,11 +30,12 @@ namespace BetterDay.Controllers
             return await HabitGroupModel.GetHabitGroupByDates(currUser, startDate, endDate);
         }
 
-        [HttpPut("create/{date}")]
-        public async Task<IActionResult> CreateHabitsForDate(DateTime date, [FromBody] IEnumerable<HabitModel> habits)
+        [HttpPut("create/{startdate}:{endDate}")]
+        public async Task<IActionResult> CreateHabitsBetweenDates(DateTime startDate, DateTime endDate, [FromBody] HabitListArray habits)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            var response = HabitGroupModel.CreateHabitGroupsBetweenDates(currUser, startDate, endDate, habits);
+            return new JsonResult(response);
         }
 
         [HttpPost("update/{id}/{status}")]
