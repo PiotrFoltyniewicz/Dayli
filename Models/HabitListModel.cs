@@ -4,10 +4,6 @@ using Newtonsoft.Json;
 
 namespace BetterDay.Models
 {
-    public class HabitListArray
-    {
-        public HabitListModel[] array { get; set; }
-    }
     public class HabitListModel
     {
         public int Id { get; set; }

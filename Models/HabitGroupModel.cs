@@ -153,25 +153,30 @@ namespace BetterDay.Models
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
             
-
             while(startDate <= endDate)
             {
                 int userId = TokenHandler.GetUserId(username).Result;
                 var query = new MySqlCommand(@$"INSERT INTO habitgroups (Date, UserId) 
                                                 VALUES ('{startDate.ToString("yyyy-MM-dd")}', {userId});", connection);
                 var reader = await query.ExecuteReaderAsync();
+                await reader.CloseAsync();   
+
                 query = new MySqlCommand($@"SELECT ID FROM habitgroups WHERE ID= LAST_INSERT_ID()", connection);
-
                 reader = await query.ExecuteReaderAsync();
+                await reader.ReadAsync();
                 int groupId = (int)reader[0];
+                await reader.CloseAsync();
 
-                foreach(HabitListModel habit in habits.array)
+                foreach(HabitListModel habit in habits.Array)
                 {
                     query = new MySqlCommand(@$"INSERT INTO habits (UserId, HabitId, GroupId, Status) 
                                             VALUES ({userId}, {habit.Id}, {groupId}, false);", connection);
+                    reader = await query.ExecuteReaderAsync();
+                    await reader.CloseAsync();
                 }
                 
-                startDate.AddDays(1);
+                startDate = startDate.AddDays(1);
+                await reader.CloseAsync();
             }
             await connection.CloseAsync();
 
