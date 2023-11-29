@@ -16,9 +16,27 @@ namespace BetterDay.Models
             Status = status;
         }
 
-        public async Task<ApiError> UpdateHabit(string username, HabitModel habit)
+        public async static Task<ApiError> UpdateHabit(string username, int id, bool status)
         {
-            return null;
+            ApiError response;
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+
+            var query = new MySqlCommand(@$"UPDATE habits
+                                            SET Status = {status}
+                                            WHERE ID = {id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
+            var reader = await query.ExecuteReaderAsync();
+            if (reader.RecordsAffected == 0)
+            {
+                response = new ApiError(444, "Habit not updated");
+            }
+            else
+            {
+                response = new ApiError(200, "Habit successfully updated");
+            }
+            await reader.CloseAsync();
+            await connection.CloseAsync();
+            return response;
         }
     }
 }

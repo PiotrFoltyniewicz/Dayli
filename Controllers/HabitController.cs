@@ -42,7 +42,8 @@ namespace BetterDay.Controllers
         public async Task<IActionResult> UpdateHabit(int id, bool status)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            var response = await HabitModel.UpdateHabit(currUser, id, status);
+            return new JsonResult(response);
         }
 
     }
