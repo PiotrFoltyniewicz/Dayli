@@ -9,32 +9,41 @@ namespace BetterDay.Controllers
     [Authorize]
     public class HabitController : ControllerBase
     {
-        [HttpGet("today")]
-        public async Task<IActionResult> GetTodaysHabits()
+        [HttpGet("all")]
+        public async Task<IEnumerable<HabitGroupModel>> GetAllHabits()
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            return await HabitGroupModel.GetAllUserHabitGroups(currUser);
+        }
+
+        [HttpGet("today")]
+        public async Task<HabitGroupModel> GetTodaysHabits()
+        {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await HabitGroupModel.GetTodaysHabitGroup(currUser);
         }
 
         [HttpGet("{startDate}:{endDate}")]
-        public async Task<IActionResult> GetHabitsBetweenDates(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<HabitGroupModel>> GetHabitsBetweenDates(DateTime startDate, DateTime endDate)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            return await HabitGroupModel.GetHabitGroupByDates(currUser, startDate, endDate);
         }
 
-        [HttpPut("create/{date}")]
-        public async Task<IActionResult> CreateHabitsForDate(DateTime date, [FromBody] IEnumerable<HabitModel> habits)
+        [HttpPut("create/{startdate}:{endDate}")]
+        public async Task<IActionResult> CreateHabitsBetweenDates(DateTime startDate, DateTime endDate, [FromBody] HabitListArray array)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            var response = await HabitGroupModel.CreateHabitGroupsBetweenDates(currUser, startDate, endDate, array);
+            return new JsonResult(response);
         }
 
         [HttpPost("update/{id}/{status}")]
         public async Task<IActionResult> UpdateHabit(int id, bool status)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            return null;
+            var response = await HabitModel.UpdateHabit(currUser, id, status);
+            return new JsonResult(response);
         }
 
     }
