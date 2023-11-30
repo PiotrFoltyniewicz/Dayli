@@ -5,9 +5,9 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import LoremIpsum from './components/LoremIpsum';
+import Task from './components/Task'
 import './custom.css';
 import { AuthProvider } from './contexts/AuthContext';
-import "inter-ui/inter.css";
 
 function App() {
     const [logPopUp, setLogPopUp] = useState(false);
@@ -21,6 +21,7 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/about" element={<h3>About</h3>} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/task" element={<Task /> } />
                 </Routes>
                 <LoremIpsum />
                 {logPopUp && <Login setLogPopUp={setLogPopUp} />}
