@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import LoremIpsum from './components/LoremIpsum';
+import About from './components/About'
 import Task from './components/Task'
 import './custom.css';
 import { AuthProvider } from './contexts/AuthContext';
@@ -19,11 +20,11 @@ function App() {
                 <Routes>
                     <Route index element={<Home />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/about" element={<h3>About</h3>} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/task" element={<Task /> } />
                 </Routes>
-                <LoremIpsum />
+                { /*<LoremIpsum /> */ }
                 {logPopUp && <Login setLogPopUp={setLogPopUp} />}
             </AuthProvider>
         </div>

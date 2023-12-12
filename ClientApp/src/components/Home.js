@@ -1,4 +1,6 @@
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from '../contexts/AuthContext'
+import quotePhoto from '../images/marcusAurelius.png'
+import GuestHome from './GuestHome.js'
 
 function Home() {
 
@@ -8,9 +10,10 @@ function Home() {
         <main>
             {token ?
                 <div>
+                    {/* LOGGED HOME PAGE */}
                     <h1>Essa</h1>
                 </div>
-                : <h1>Please Log in</h1>}
+                : <GuestHome/>}
         </main>
     )
 }

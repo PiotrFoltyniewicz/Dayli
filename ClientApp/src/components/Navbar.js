@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import betterDayLogo from '../images/betterDayLogo.png';
+import dayliLogo from '../images/dayliLogo.png';
 import { useAuth } from '../contexts/AuthContext';
 
 function Navbar(props) {
@@ -25,8 +25,8 @@ function Navbar(props) {
         <header className="header">
             <div className="navbar--top">
                 <a className="navbar--name" href="/">
-                    <img src={betterDayLogo} alt="Logo" />
-                    BetterDay
+                    <img src={dayliLogo} alt="Logo" />
+                    Dayli
                 </a>
                 <button className="navbar--control" onClick={showNavbar}>
                     <span></span>

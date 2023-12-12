@@ -1,11 +1,13 @@
 /* Font family settings */
 * {
-    font-family: "Inter", "system-ui";
+    font-family: "Helvetica", "system-ui";
+    box-sizing: border-box;
 }
 
 @supports (font-variation-settings: normal) {
     * {
-        font-family: "Inter var", "system-ui";
+        font-family: "Helvetica", "system-ui";
+        box-sizing: border-box;
     }
 }
 
@@ -176,6 +178,16 @@ body {
     background: white;
     border-radius: 1rem;
     border: 2px solid gray;
+}
+
+.home--content{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.home--content .randomQuote{
+    font-style: italic;
+    font-size: 1.1em;
 }
 
 /* Responsive design */
