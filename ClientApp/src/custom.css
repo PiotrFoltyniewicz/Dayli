@@ -190,6 +190,46 @@ body {
     font-size: 1.1em;
 }
 
+/* Temporary */
+.imageGallery{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    height: 400px;
+}
+
+.imageGallery--object{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    border-radius: 25px;
+}
+
+.imageGallery--object img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.imageGallery--object p{
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    font-size: 3em;
+    font-weight: 900;
+    color: black;
+    -webkit-text-stroke: white 2px;
+}
+
+.imageGallery--buttons{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+
 /* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {
