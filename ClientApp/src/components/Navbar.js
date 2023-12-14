@@ -35,6 +35,30 @@ function Navbar(props) {
                 </button>
             </div>
             <nav className="navbar" ref={navbarRef}>
+                {/*
+                <ul className='navbar--middle'>
+                    <li>
+                        <a className='navbar--middle--element' href='/task'>
+                            Tasks
+                        </a>
+                    </li>
+                    <li>
+                        <a className='navbar--middle--element' href='/habit'>
+                            Habits
+                        </a>
+                    </li>
+                    <li>
+                        <a className='navbar--middle--element' href='/note'>
+                            Notes
+                        </a>
+                    </li>
+                    <li>
+                        <a className='navbar--middle--element' href='/statistics'>
+                            Statistics
+                        </a>
+                    </li>
+                </ul>
+                */}
                 <ul className="navbar--right">
                     <li>
                         <a className="navbar--right--element" href="/home">

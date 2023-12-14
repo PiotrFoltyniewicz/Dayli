@@ -1,15 +1,42 @@
-﻿import quotePhoto from '../images/marcusAurelius.png'
+﻿import { useEffect } from "react";
+import { useAuth } from '../contexts/AuthContext'
 
 function LoggedHome() {
 
+    const { token } = useAuth();
+    let todayTasks = []
+
+    useEffect(() => {
+        todayTasks = GetTodayTasks();
+    }, [])
+
+    async function GetTodayTasks() {
+        const response = await fetch('/api/Task/all', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        });
+        const data = await response.json();
+        return data;
+    }
     return (
         <div className='home--content' >
-            <img src={quotePhoto} width='200px' />
-            <div className='randomQuote'>
-                <q>Look well into thyself; there is a source of strength which will always spring up if thou wilt always look.</q> - Marcus Aurelius
-            </div>
             { /* Jakieś brane nazwy uzytkownika */}
-            <h1>Welcome user</h1>
+            <h1>Welcome back</h1>
+            <div className='home--userContent'>
+                <div className='home--userContent--tasks'>
+                    <h2>Today tasks</h2>
+                    { todayTasks }
+                </div>
+                <div className='home--userContent--habits'>
+                    <h2>Habit tracker</h2>
+                </div>
+                <div className='home--userContent--notes'>
+                    <h2>Todays note</h2>
+                </div>
+            </div>
         </div>
     )
 }

@@ -100,6 +100,23 @@ body {
         background-color: lightgray;
     }
 
+.navbar--middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar--middle--element {
+    font-size: larger;
+    border-radius: 15px;
+    width: inherit;
+    cursor: pointer;
+}
+
+    .navbar--middle--element:hover {
+        background-color: lightgray;
+    }
+
 .navbar--control {
     display: none;
 }
@@ -185,12 +202,23 @@ body {
     align-items: center;
     flex-direction: column;
 }
-.home--content .randomQuote{
+
+.quoteBlock{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.quoteBlock q {
     font-style: italic;
     font-size: 1.1em;
 }
 
-/* Temporary */
+.quoteBlock img{
+    width: 200px;
+}
+
+
 .imageGallery{
     display: flex;
     flex-direction: column;
@@ -229,7 +257,19 @@ body {
     align-items: stretch;
 }
 
+.home--userContent{
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+}
 
+.home--userContent > *{
+    min-width: 30%;
+    min-height: 250px;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 10px 20px;
+}
 /* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {

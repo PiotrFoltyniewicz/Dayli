@@ -1,6 +1,6 @@
 import { useAuth } from '../contexts/AuthContext'
-import quotePhoto from '../images/marcusAurelius.png'
 import GuestHome from './GuestHome.js'
+import LoggedHome from './LoggedHome.js'
 
 function Home() {
 
@@ -9,11 +9,8 @@ function Home() {
     return (
         <main>
             {token ?
-                <div>
-                    {/* LOGGED HOME PAGE */}
-                    <h1>Essa</h1>
-                </div>
-                : <GuestHome/>}
+                  <LoggedHome />
+                : <GuestHome />}
         </main>
     )
 }
