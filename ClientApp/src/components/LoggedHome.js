@@ -18,13 +18,17 @@ function LoggedHome() {
                     'Authorization': 'Bearer ' + token
                 },
             });
-            const data = await response.json();
-            const output = data.map(x => (
-                <label className='task'>
-                    <input type='checkbox' checked={x.status} />
-                    {x.title}
-                </label>))
-            setTodayTasks(output);
+
+            if (response.ok) {
+                const data = await response.json();
+                const output = data.map(x => (
+                    <label className='task'>
+                        <input type='checkbox' checked={x.status} />
+                        {x.title}
+                    </label>))
+                setTodayTasks(output);
+            }
+
         }
         GetTodayTasks();
     }, []);
