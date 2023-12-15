@@ -16,15 +16,15 @@ namespace BetterDay.Models
             Status = status;
         }
 
-        public async static Task<ApiError> UpdateHabit(string username, int id, bool status)
+        public async static Task<ApiError> UpdateHabit(string username, HabitModel habit)
         {
             ApiError response;
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
             var query = new MySqlCommand(@$"UPDATE habits
-                                            SET Status = {status}
-                                            WHERE ID = {id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
+                                            SET Status = {habit.Status}
+                                            WHERE ID = {habit.Id} AND UserId = {TokenHandler.GetUserId(username).Result};", connection);
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {

@@ -7,11 +7,11 @@ namespace BetterDay.Models
 {
     public class HabitGroupModel
     {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public int? Id { get; set; }
+        public DateTime? Date { get; set; }
         public List<HabitModel> Habits { get; set; }
 
-        public HabitGroupModel(int id, DateTime date, IEnumerable<HabitModel> habits) 
+        public HabitGroupModel(int? id, DateTime? date, IEnumerable<HabitModel> habits) 
         {
             Id = id;
             Date = date;
@@ -98,7 +98,8 @@ namespace BetterDay.Models
 
             await reader.CloseAsync();
             await connection.CloseAsync();
-            return new HabitGroupModel((int)groupId, (DateTime)date, habits);
+
+            return new HabitGroupModel((int?)groupId, (DateTime?)date, habits);
         }
 
         public async static Task<IEnumerable<HabitGroupModel>> GetHabitGroupByDates(string username, DateTime startDate, DateTime endDate)

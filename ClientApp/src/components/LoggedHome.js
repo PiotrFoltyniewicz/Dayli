@@ -11,7 +11,7 @@ function LoggedHome() {
     // Getting initial data from database
     useEffect(() => {
         async function getTodayTasks() {
-            const response = await fetch('/api/task/today', {
+            const taskResponse = await fetch('/api/task/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -19,14 +19,14 @@ function LoggedHome() {
                 },
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                setTodayTasks(data);
+            if (taskResponse.ok) {
+                const taskData = await taskResponse.json();
+                setTodayTasks(taskData);
             }
         }
-        // TODO
+
         async function getTodayHabits() {
-            const response = await fetch('/api/task/today', {
+            const habitResponse = await fetch('/api/habit/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,15 +34,14 @@ function LoggedHome() {
                 },
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                setTodayTasks(data);
+            if (habitResponse.ok) {
+                const habitData = await habitResponse.json();
+                setTodayHabits(habitData.habits);
             }
         }
 
-        // TODO
-        async function getTodayNotes() {
-            const response = await fetch('/api/task/today', {
+        async function getTodayNote() {
+            const noteResponse = await fetch('/api/note/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,13 +49,15 @@ function LoggedHome() {
                 },
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                setTodayTasks(data);
+            if (noteResponse.ok) {
+                const noteData = await noteResponse.json();
+                setTodayNote(noteData);
             }
         }
 
         getTodayTasks();
+        getTodayHabits();
+        getTodayNote();
     }, []);
 
     // Maps array of objects of todayTasks to displayable format
@@ -66,6 +67,18 @@ function LoggedHome() {
                 <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
                 {task.title}
             </label>))
+    }
+
+    function renderTodayHabits() {
+        return todayHabits.map(habit => (
+            <label key={habit.id} className='habit'>
+                <input type='checkbox' defaultChecked={habit.status} onChange={() => changeHabitStatus(habit.id)} />
+                {habit.title}
+            </label>))
+    }
+
+    function renderTodayNote() {
+        return (<p>{todayNote[0].note}</p>)
     }
 
 
@@ -93,6 +106,29 @@ function LoggedHome() {
         
     }
 
+    async function changeHabitStatus(id) {
+        setTodayHabits(prev => {
+            return prev.map(habit => habit.id === id ? { ...habit, status: !habit.status } : habit)
+        });
+
+        let updatedHabit = {};
+        for (let habit of todayHabits) {
+            if (habit.id === id) {
+                updatedHabit = { ...habit, status: !habit.status }
+                break;
+            }
+        }
+        const response = await fetch(`/api/habit/update/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedHabit)
+        });
+
+    }
+
     return (
         <div className='home--content' >
             { /* Jakieś brane nazwy uzytkownika */}
@@ -100,13 +136,15 @@ function LoggedHome() {
             <div className='home--userContent'>
                 <div className='home--userContent--tasks'>
                     <h2>Today tasks</h2>
-                    { todayTasks.length > 0 ? renderTodayTasks() : null}
+                    {todayTasks.length > 0 ? renderTodayTasks() : <p>There is nothing we can do</p>}
                 </div>
                 <div className='home--userContent--habits'>
                     <h2>Habit tracker</h2>
+                    {todayHabits.length > 0 ? renderTodayHabits() : <p>There is nothing we can track</p>}
                 </div>
                 <div className='home--userContent--notes'>
                     <h2>Todays note</h2>
+                    {todayNote.length > 0 ? renderTodayNote() : <p>There is nothing we have noted</p>}
                 </div>
             </div>
         </div>

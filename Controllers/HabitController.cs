@@ -38,11 +38,12 @@ namespace BetterDay.Controllers
             return new JsonResult(response);
         }
 
-        [HttpPost("update/{id}/{status}")]
-        public async Task<IActionResult> UpdateHabit(int id, bool status)
+        [HttpPost("update/{id}")]
+        public async Task<IActionResult> UpdateHabit(int id, [FromBody] HabitModel habit)
         {
+            habit.Id = id;
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
-            var response = await HabitModel.UpdateHabit(currUser, id, status);
+            var response = await HabitModel.UpdateHabit(currUser, habit);
             return new JsonResult(response);
         }
 
