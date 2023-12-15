@@ -4,36 +4,95 @@ import { useAuth } from '../contexts/AuthContext'
 function LoggedHome() {
 
     const { token } = useAuth();
-    const [todayTasks, setTodayTasks] = useState([1]);
+    const [todayTasks, setTodayTasks] = useState([]);
     const [todayHabits, setTodayHabits] = useState([]);
     const [todayNote, setTodayNote] = useState([]);
 
+    // Getting initial data from database
     useEffect(() => {
-        async function GetTodayTasks() {
-            const response = await fetch('/api/Task/all', {
+        async function getTodayTasks() {
+            const response = await fetch('/api/task/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // JAK WYSŁAĆ TEN TOKEN??!!!?! >:(
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': `Bearer ${token}`
                 },
             });
 
             if (response.ok) {
                 const data = await response.json();
-                const output = data.map(x => (
-                    <label className='task'>
-                        <input type='checkbox' checked={x.status} />
-                        {x.title}
-                    </label>))
-                setTodayTasks(output);
+                setTodayTasks(data);
             }
-
         }
-        GetTodayTasks();
+        // TODO
+        async function getTodayHabits() {
+            const response = await fetch('/api/task/today', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setTodayTasks(data);
+            }
+        }
+
+        // TODO
+        async function getTodayNotes() {
+            const response = await fetch('/api/task/today', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setTodayTasks(data);
+            }
+        }
+
+        getTodayTasks();
     }, []);
 
-    
+    // Maps array of objects of todayTasks to displayable format
+    function renderTodayTasks() {
+        return todayTasks.map(task => (
+            <label key={task.id} className='task'>
+                <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
+                {task.title}
+            </label>))
+    }
+
+
+    // Updates state of todayTasks and updates task status in database
+    async function changeTaskStatus(id) {
+        setTodayTasks(prev => {
+            return prev.map(task =>  task.id === id ? { ...task, status: !task.status } : task )
+        });
+        
+        let updatedTask = {};
+        for (let task of todayTasks) {
+            if (task.id === id) {
+                updatedTask = { ...task, status: !task.status }
+                break;
+            }
+        }
+        const response = await fetch(`/api/task/update/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedTask)
+        });
+        
+    }
+
     return (
         <div className='home--content' >
             { /* Jakieś brane nazwy uzytkownika */}
@@ -41,7 +100,7 @@ function LoggedHome() {
             <div className='home--userContent'>
                 <div className='home--userContent--tasks'>
                     <h2>Today tasks</h2>
-                    { todayTasks.length > 0 ? todayTasks : null}
+                    { todayTasks.length > 0 ? renderTodayTasks() : null}
                 </div>
                 <div className='home--userContent--habits'>
                     <h2>Habit tracker</h2>

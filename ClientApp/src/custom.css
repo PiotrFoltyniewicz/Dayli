@@ -264,6 +264,8 @@ body {
 }
 
 .home--userContent > *{
+    display: flex;
+    flex-direction: column;
     min-width: 30%;
     min-height: 250px;
     background-color: lightgray;
