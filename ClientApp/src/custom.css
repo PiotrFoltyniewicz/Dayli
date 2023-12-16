@@ -272,12 +272,24 @@ body {
     border-radius: 20px;
     padding: 10px 20px;
     margin: 15px;
+    font-size: 1.2em;
 }
 
 .home--userContent--box div{
     display: flex;
     flex-direction: column;
     width: 60%;
+}
+
+.taskElement, .habitElement{
+    background-color: darkgray;
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.taskElement:hover, .habitElement:hover {
+    background-color: gray;
 }
 
 .home--userContent--circleProgressbar{

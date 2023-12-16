@@ -65,7 +65,7 @@ function LoggedHome() {
     // Maps array of objects of todayTasks to displayable format
     function renderTodayTasks() {
         return todayTasks.map(task => (
-            <label key={task.id} className='task'>
+            <label key={task.id} className='taskElement'>
                 <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
                 {task.title}
             </label>))
@@ -73,7 +73,7 @@ function LoggedHome() {
 
     function renderTodayHabits() {
         return todayHabits.map(habit => (
-            <label key={habit.id} className='habit'>
+            <label key={habit.id} className='habitElement'>
                 <input type='checkbox' defaultChecked={habit.status} onChange={() => changeHabitStatus(habit.id)} />
                 {habit.title}
             </label>))
