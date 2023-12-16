@@ -1,5 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { useAuth } from '../contexts/AuthContext'
+import { CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css';
 
 function LoggedHome() {
 
@@ -129,22 +131,45 @@ function LoggedHome() {
 
     }
 
+    const tasksDone = todayTasks.filter(task => task.status).length;
+    const habitsDone = todayHabits.filter(habit => habit.status).length;
+
     return (
         <div className='home--content' >
             { /* Jakieś brane nazwy uzytkownika */}
             <h1>Welcome back</h1>
             <div className='home--userContent'>
-                <div className='home--userContent--tasks'>
-                    <h2>Today tasks</h2>
-                    {todayTasks.length > 0 ? renderTodayTasks() : <p>There is nothing we can do</p>}
+                <div className='home--userContent--box'>
+                    <div className='home--userContent--box--tasks'>
+                        <h2>Today tasks</h2>
+                        {todayTasks.length > 0 ? renderTodayTasks() : <p>There is nothing we can do</p>}
+                    </div>
+                    {todayTasks.length > 0 &&
+                        <CircularProgressbar
+                           className='home--userContent--circleProgressbar'
+                           value={tasksDone}
+                           maxValue={todayTasks.length}
+                           text={`${Math.round(tasksDone / todayTasks.length * 100)}%`}
+                        />}
                 </div>
-                <div className='home--userContent--habits'>
-                    <h2>Habit tracker</h2>
-                    {todayHabits.length > 0 ? renderTodayHabits() : <p>There is nothing we can track</p>}
+                <div className='home--userContent--box'>
+                    <div className='home--userContent--box--habits'>
+                        <h2>Habit tracker</h2>
+                        {todayHabits.length > 0 ? renderTodayHabits() : <p>There is nothing we can track</p>}
+                    </div>
+                    {todayHabits.length > 0 &&
+                        <CircularProgressbar
+                            className='home--userContent--circleProgressbar'
+                            value={habitsDone}
+                            maxValue={todayHabits.length}
+                            text={`${Math.round(habitsDone / todayHabits.length * 100)}%`}
+                        />}
                 </div>
-                <div className='home--userContent--notes'>
-                    <h2>Todays note</h2>
-                    {todayNote.length > 0 ? renderTodayNote() : <p>There is nothing we have noted</p>}
+                <div className='home--userContent--box'>
+                    <div className='home--userContent--box--note'>
+                        <h2>Todays note</h2>
+                        {todayNote.length > 0 ? renderTodayNote() : <p>There is nothing we have noted</p>}
+                    </div>
                 </div>
             </div>
         </div>

@@ -263,14 +263,25 @@ body {
     width: 90%;
 }
 
-.home--userContent > *{
+.home--userContent--box {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     min-width: 30%;
     min-height: 250px;
     background-color: lightgray;
     border-radius: 20px;
     padding: 10px 20px;
+    margin: 15px;
+}
+
+.home--userContent--box div{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.home--userContent--circleProgressbar{
+    width: 40%;
 }
 /* Responsive design */
 @media only screen and (max-width: 970px) {
