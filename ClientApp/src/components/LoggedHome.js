@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { useAuth } from '../contexts/AuthContext'
-import { CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar'
+import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css';
 
 function LoggedHome() {

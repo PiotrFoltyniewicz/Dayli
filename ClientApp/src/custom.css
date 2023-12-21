@@ -295,6 +295,18 @@ body {
 .home--userContent--circleProgressbar{
     width: 40%;
 }
+
+.taskPage{
+    display: flex;
+    flex-direction: row;
+}
+
+.taskPage aside{
+    width: 30%;
+}
+.taskPage-main{
+    width: 70%;
+}
 /* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {
