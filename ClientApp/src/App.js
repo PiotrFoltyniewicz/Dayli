@@ -4,7 +4,6 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Profile from './components/Profile';
-import LoremIpsum from './components/LoremIpsum';
 import About from './components/About'
 import Task from './components/Task'
 import './custom.css';
@@ -19,10 +18,10 @@ function App() {
                 <Navbar setLogPopUp={setLogPopUp} />
                 <Routes>
                     <Route index element={<Home />} />
-                    <Route path="/home" element={<Home />} />
+                    <Route path="/home" element={<Home setLogPopUp={setLogPopUp} />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/task" element={<Task /> } />
+                    <Route path="/task" element={<Task />} /> {/*testowe */ }
                 </Routes>
                 { /*<LoremIpsum /> */ }
                 {logPopUp && <Login setLogPopUp={setLogPopUp} />}

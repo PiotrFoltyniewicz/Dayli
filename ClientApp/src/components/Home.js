@@ -1,8 +1,8 @@
 import { useAuth } from '../contexts/AuthContext'
 import quotePhoto from '../images/marcusAurelius.png'
 import GuestHome from './GuestHome.js'
-
-function Home() {
+import Tasks from './Tasks'
+function Home(props) {
 
     const { token } = useAuth();
 
@@ -11,9 +11,9 @@ function Home() {
             {token ?
                 <div>
                     {/* LOGGED HOME PAGE */}
-                    <h1>Essa</h1>
+                    <Tasks/>
                 </div>
-                : <GuestHome/>}
+                : <GuestHome setLogPopUp={props.setLogPopUp} />}
         </main>
     )
 }

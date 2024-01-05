@@ -1,6 +1,10 @@
 ﻿import quotePhoto from '../images/marcusAurelius.png'
 
-function GuestHome() {
+function GuestHome(props) {
+
+    function handleClick(event) {
+        props.setLogPopUp(prev => !prev)
+    }
 
     return (
         <div className='home--content' >
@@ -9,7 +13,7 @@ function GuestHome() {
                 <q>Look well into thyself; there is a source of strength which will always spring up if thou wilt always look.</q> - Marcus Aurelius
             </div>
             <h1>Boost your productivity with Dayli</h1>
-            <button>Join for free!</button>
+            <button onClick={handleClick }>Join for free!</button>
             <h2>Plan your life</h2>
             <img src='.' width='200px'/>
             <h2>Take action</h2>
