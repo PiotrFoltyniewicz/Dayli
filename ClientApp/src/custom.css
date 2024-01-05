@@ -100,6 +100,23 @@ body {
         background-color: lightgray;
     }
 
+.navbar--middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar--middle--element {
+    font-size: larger;
+    border-radius: 15px;
+    width: inherit;
+    cursor: pointer;
+}
+
+    .navbar--middle--element:hover {
+        background-color: lightgray;
+    }
+
 .navbar--control {
     display: none;
 }
@@ -185,11 +202,99 @@ body {
     align-items: center;
     flex-direction: column;
 }
-.home--content .randomQuote{
+
+.quoteBlock{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.quoteBlock q {
     font-style: italic;
     font-size: 1.1em;
 }
 
+.quoteBlock img{
+    width: 200px;
+}
+
+
+.imageGallery{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    height: 400px;
+}
+
+.imageGallery--object{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    border-radius: 25px;
+}
+
+.imageGallery--object img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.imageGallery--object p{
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    font-size: 3em;
+    font-weight: 900;
+    color: black;
+    -webkit-text-stroke: white 2px;
+}
+
+.imageGallery--buttons{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.home--userContent{
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+}
+
+.home--userContent--box {
+    display: flex;
+    flex-direction: row;
+    min-width: 30%;
+    min-height: 250px;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 15px;
+    font-size: 1.2em;
+}
+
+.home--userContent--box div{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.taskElement, .habitElement{
+    background-color: darkgray;
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.taskElement:hover, .habitElement:hover {
+    background-color: gray;
+}
+
+.home--userContent--circleProgressbar{
+    width: 40%;
+}
 /* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {
