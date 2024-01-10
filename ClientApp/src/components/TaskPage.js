@@ -2,6 +2,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { Calendar } from 'react-calendar'
 import { useState, useEffect } from 'react'
 import 'react-calendar/dist/Calendar.css';
+import { CircularProgressbar } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css';
+
 function TaskPage() {
 
     const { token } = useAuth();

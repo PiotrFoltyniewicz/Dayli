@@ -324,9 +324,10 @@ body {
 }
 
 .taskPage aside{
-    width: 25%;
+    width: 20%;
 }
 .taskPage--main{
+    min-width: 80%;
     display: flex;
     flex-direction: row;
 }
