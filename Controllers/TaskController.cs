@@ -64,8 +64,8 @@ namespace BetterDay.Controllers
             return await TaskStatsModel.GetPercentage(currUser, startDate, endDate);
         }
 
-        [HttpGet("stats/{startDate}:{endDate}-{interval}")]
-        public async Task<IEnumerable<Percentage>> GetTaskStatsBetweenDatesByInterval(DateTime startDate, DateTime endDate, int interval)
+        [HttpGet("stats/{interval}:{startDate}:{endDate}")]
+        public async Task<IEnumerable<Percentage>> GetTaskStatsBetweenDatesByInterval(int interval, DateTime startDate, DateTime endDate)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
             return await TaskStatsModel.GetPercentagesByInterval(currUser, startDate, endDate, interval);

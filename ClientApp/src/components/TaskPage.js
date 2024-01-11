@@ -11,6 +11,8 @@ function TaskPage() {
     const [chosenDate, setChosenDate] = useState(new Date());
     const currentDate = new Date();
     const [tasks, setTasks] = useState([]);
+    const [weekStats, setWeekStats] = useState(null);
+    const [monthStats, setMonthStats] = useState(null);
 
     useEffect(() => {
         async function getTasks() {
@@ -27,7 +29,45 @@ function TaskPage() {
                 setTasks(taskData);
             }
         }
+        async function getWeekStats() {
+            let currentDate = new Date();
+            let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
+
+            let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                setWeekStats(data);
+            }
+        }
+
+        async function getMonthStats() {
+            let currentDate = new Date();
+            let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
+
+            let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                setMonthStats(data);
+            }
+        }
+
         getTasks();
+        getWeekStats();
+        getMonthStats();
     }, []);
     function convertToMonthName(n) {
         switch (n) {
