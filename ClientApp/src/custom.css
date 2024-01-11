@@ -358,6 +358,10 @@ body {
     margin: 15px;
     font-size: 1.2em;
 }
+
+taskPage--main--stats--circleProgressbar{
+    width: 40%;
+}
 /* Responsive design */
 @media only screen and (max-width: 970px) {
     .navbar {

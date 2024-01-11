@@ -109,12 +109,18 @@ function TaskPage() {
                         <button>Add task</button>
                     </section>
                     <section className='taskPage--main--stats'>
-                        {/*WYKRES NA DZISIAJ*/}
-                        {/*WYKRES NA TYDZIEÑ*/}
-                        {/*WYKRES NA MIESI¥C*/}
+                        <h3>Tasks completed today</h3>
+                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
+                        <h3>Tasks completed this week</h3>
+                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
+                        <h3>Tasks completed this month</h3>
+                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
                     </section>
-                 </main>
+                </main>
             </div>
+            <section className='task-Page--advancedStats'>
+                <h3>Advanced statistics</h3>
+            </section>
         </div>)
 }
 export default TaskPage
