@@ -93,6 +93,28 @@ namespace BetterDay.Models
             return tasks;
         }
 
+        public async static Task<IEnumerable<TaskModel>> GetTasksBetweenDates(string username, DateTime startDate, DateTime endDate)
+        {
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+
+            var query = new MySqlCommand(@$"SELECT t.Id, t.Date, t.Title, t.Status
+                                            FROM tasks AS t
+                                            INNER JOIN users AS u
+                                            ON t.UserID = u.ID
+                                            WHERE u.Username = '{username}' AND DATE(Date) BETWEEN '{startDate.ToString("yyyy-MM-dd")}' AND '{endDate.ToString("yyyy-MM-dd")}';", connection);
+            var reader = await query.ExecuteReaderAsync();
+
+            List<TaskModel> tasks = new List<TaskModel>();
+            while (await reader.ReadAsync())
+            {
+                tasks.Add(new TaskModel((int)reader[0], (DateTime)reader[1], (string)reader[2], (bool)reader[3]));
+            }
+            await reader.CloseAsync();
+            await connection.CloseAsync();
+            return tasks;
+        }
+
         public async static Task<ApiError> CreateTask(string username, TaskModel task)
         {
             ApiError response;
