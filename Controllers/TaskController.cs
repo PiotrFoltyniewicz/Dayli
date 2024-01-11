@@ -56,5 +56,19 @@ namespace BetterDay.Controllers
             var result = await TaskModel.DeleteTask(currUser, id);
             return new JsonResult(result);
         }
+
+        [HttpGet("stats/{startDate}:{endDate}")]
+        public async Task<Percentage> GetTaskStatsBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await TaskStatsModel.GetPercentage(currUser, startDate, endDate);
+        }
+
+        [HttpGet("stats/{startDate}:{endDate}-{interval}")]
+        public async Task<IEnumerable<Percentage>> GetTaskStatsBetweenDatesByInterval(DateTime startDate, DateTime endDate, int interval)
+        {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await TaskStatsModel.GetPercentagesByInterval(currUser, startDate, endDate, interval);
+        }
     }
 }
