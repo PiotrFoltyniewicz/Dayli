@@ -16,7 +16,7 @@ function TaskPage() {
 
     useEffect(() => {
         async function getTasks() {
-            const taskResponse = await fetch('/api/task/today', {
+            const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ function TaskPage() {
         }
         async function getWeekStats() {
             let currentDate = new Date();
-            let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
+            let prevDate = new Date(new Date().setDate(new Date().getDate() - 7));
 
             let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
                 method: 'GET',
@@ -68,7 +68,7 @@ function TaskPage() {
         getTasks();
         getWeekStats();
         getMonthStats();
-    }, []);
+    }, [chosenDate]);
     function convertToMonthName(n) {
         switch (n) {
             case 0:
