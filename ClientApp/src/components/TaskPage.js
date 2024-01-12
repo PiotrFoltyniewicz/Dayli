@@ -14,6 +14,43 @@ function TaskPage() {
     const [weekStats, setWeekStats] = useState(null);
     const [monthStats, setMonthStats] = useState(null);
 
+    async function getWeekStats() {
+        let currentDate = new Date();
+        let prevDate = new Date(new Date().setDate(new Date().getDate() - 7));
+
+        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (response.ok) {
+            let data = await response.json();
+            setWeekStats(data);
+        }
+    }
+
+    async function getMonthStats() {
+        let currentDate = new Date();
+        let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
+
+        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (response.ok) {
+            let data = await response.json();
+            console.log(data)
+            setMonthStats(data);
+        }
+    }
+
     useEffect(() => {
         async function getTasks() {
             const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
@@ -29,41 +66,7 @@ function TaskPage() {
                 setTasks(taskData);
             }
         }
-        async function getWeekStats() {
-            let currentDate = new Date();
-            let prevDate = new Date(new Date().setDate(new Date().getDate() - 7));
-
-            let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-            if (response.ok) {
-                let data = await response.json();
-                setWeekStats(data);
-            }
-        }
-
-        async function getMonthStats() {
-            let currentDate = new Date();
-            let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
-
-            let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-            if (response.ok) {
-                let data = await response.json();
-                setMonthStats(data);
-            }
-        }
+        
 
         getTasks();
         getWeekStats();
@@ -129,7 +132,11 @@ function TaskPage() {
             body: JSON.stringify(updatedTask)
         });
 
+        getWeekStats()
+        getMonthStats()
     }
+
+    const todayTasksDone = tasks.filter(task => task.status).length;
 
     return (
         <div className='taskPage'>
@@ -137,12 +144,9 @@ function TaskPage() {
                 <h1>Welcome to the Task Page</h1>
                 <h2>{`Today is ${currentDate.getUTCDate()} ${convertToMonthName(currentDate.getUTCMonth())} ${currentDate.getUTCFullYear()}`}</h2>
             </header>
-            <div className='taskPage--wrapper'>
-                <aside>
-                    { /* jak mo¿liwe to daæ kropki przy dniach gdzie s¹ taski do zrobienia i haczyki jak wszystkie zrobione*/}
-                    <Calendar onChange={setChosenDate} />
-                </aside>
                 <main className='taskPage--main'>
+                    { /* jak mo¿liwe to daæ kropki przy dniach gdzie s¹ taski do zrobienia i haczyki jak wszystkie zrobione*/}
+                    <Calendar className='taskPage--calendar' onChange={setChosenDate} />
                     <section className='taskPage--main--taskList'>
                         <h3>{`Tasks for ${chosenDate.getUTCDate()} ${convertToMonthName(chosenDate.getUTCMonth())} ${chosenDate.getUTCFullYear()}`}</h3>
                         {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}                                     
@@ -150,14 +154,32 @@ function TaskPage() {
                     </section>
                     <section className='taskPage--main--stats'>
                         <h3>Tasks completed today</h3>
-                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
+                        {tasks.length === 0 ? 'There are no tasks' :
+                            <CircularProgressbar
+                                className='taskPage--main--stats--circleProgressbar'
+                                value={todayTasksDone}
+                                maxValue={tasks.length}
+                                text={`${(todayTasksDone / tasks.length) * 100}%`}
+                            />}
                         <h3>Tasks completed this week</h3>
-                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
+                        {weekStats == null || weekStats.totalTasks === 0 ? 'There are no tasks' :
+                            <CircularProgressbar
+                                className='taskPage--main--stats--circleProgressbar'
+                                value={weekStats.tasksDone}
+                                maxValue={weekStats.totalTasks}
+                                text={`${weekStats.percentage * 100}%`}
+                            />}
+                        
                         <h3>Tasks completed this month</h3>
-                        <CircularProgressbar className='taskPage--main--stats--circleProgressbar'/>
+                        {monthStats == null || monthStats.totalTasks === 0 ? 'There are no tasks' :
+                            <CircularProgressbar
+                                className='taskPage--main--stats--circleProgressbar'
+                                value={monthStats.tasksDone}
+                                maxValue={monthStats.totalTasks}
+                                text={`${monthStats.percentage * 100}%`}
+                            />}
                     </section>
                 </main>
-            </div>
             <section className='task-Page--advancedStats'>
                 <h3>Advanced statistics</h3>
             </section>

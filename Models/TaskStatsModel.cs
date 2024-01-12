@@ -4,11 +4,11 @@ namespace BetterDay.Models
 {
     public struct Percentage
     {
-        public DateTime startDate;
-        public DateTime endDate;
-        public int totalTasks;
-        public int tasksDone;
-        public float percentage;
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public int totalTasks { get; set; }
+        public int tasksDone { get; set; }
+        public float percentage { get; set; }
     }
     public class TaskStatsModel
     {
@@ -21,8 +21,14 @@ namespace BetterDay.Models
             stats.endDate = endDate;
             stats.totalTasks = tasks.Count();
             stats.tasksDone = tasks.Count(task => task.Status == true);
-            stats.percentage = stats.tasksDone / stats.totalTasks;
-
+            if (stats.totalTasks == 0)
+            {
+                stats.percentage = 0;
+            }
+            else
+            {
+                stats.percentage = (float)stats.tasksDone / (float)stats.totalTasks;
+            }
             return stats;
         }
 

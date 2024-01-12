@@ -314,22 +314,20 @@ body {
     margin-bottom: 0px;
 }
 
-.taskPage--wrapper{
+.taskPage--calendar{
+    border-radius: 20px;
+    min-width: 220px;
+    max-height: 300px;
+    margin-top: 15px;
+}
+
+.taskPage--main {
     display: flex;
     flex-direction: row;
     margin: 0px 30px;
     padding: 30px;
     background-color: rgb(243, 243, 243);
     border-radius: 20px;
-}
-
-.taskPage aside{
-    width: 20%;
-}
-.taskPage--main{
-    min-width: 80%;
-    display: flex;
-    flex-direction: row;
 }
 
 .taskPage--main--taskList {
@@ -359,7 +357,7 @@ body {
     font-size: 1.2em;
 }
 
-taskPage--main--stats--circleProgressbar{
+.taskPage--main--stats--circleProgressbar{
     width: 40%;
 }
 /* Responsive design */
