@@ -70,9 +70,9 @@ function TaskPage() {
         }
     }
 
-    async function getDaysWithTasks() {
-        let currentDate = new Date();
-        let response = await fetch(`/api/task/stats/calendar/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${1}:${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${new Date(chosenDate.getFullYear(), chosenDate.getMonth(), 0).getDate()}`, {
+    async function getDaysWithTasks(date) {
+        console.log(`${date.getFullYear()}-${ date.getMonth() + 1 }-${ 1 }`)
+        let response = await fetch(`/api/task/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -82,6 +82,7 @@ function TaskPage() {
 
         if (response.ok) {
             let data = await response.json();
+            data = data.map(date => new Date(date))
             setDaysWithTasks(data);
         }
     }
@@ -107,7 +108,7 @@ function TaskPage() {
         getTodayStats();
         getWeekStats();
         getMonthStats();
-        getDaysWithTasks();
+        getDaysWithTasks(chosenDate);
     }, [chosenDate]);
     function convertToMonthName(n) {
         switch (n) {
@@ -176,20 +177,14 @@ function TaskPage() {
 
     function highlightCalendarTiles({ date, view }) {
         for (let day of daysWithTasks) {
-            if (date.getDate() === day) {
+            if (date.getTime() === day.getTime()) {
                 return 'calendarTile--tasksNotDone';
             }
         }
     }
 
-    function resetCalendarTiles() {
-        return '';
-    }
-
-
-    function chooseDate(date) {
-        getDaysWithTasks();
-        setChosenDate(date)
+    function onCalendarMonthChange({ action, activeStartDate, value, view }) {
+        getDaysWithTasks(activeStartDate);
     }
 
     return (
@@ -199,7 +194,11 @@ function TaskPage() {
                 <h2>{`Today is ${currentDate.getUTCDate()} ${convertToMonthName(currentDate.getUTCMonth())} ${currentDate.getUTCFullYear()}`}</h2>
             </header>
             <main className='taskPage--main'>
-                <Calendar className='taskPage--calendar' onChange={(x) => chooseDate(x)} onActiveStartDateChange={resetCalendarTiles} tileClassName={highlightCalendarTiles} />
+                <Calendar
+                    className='taskPage--calendar'
+                    onChange={setChosenDate}
+                    onActiveStartDateChange={onCalendarMonthChange}
+                    tileClassName={highlightCalendarTiles} />
                 <section className='taskPage--main--taskList'>
                     <h3>{`Tasks for ${chosenDate.getUTCDate()} ${convertToMonthName(chosenDate.getUTCMonth())} ${chosenDate.getUTCFullYear()}`}</h3>
                     {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}                                     

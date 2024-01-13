@@ -46,15 +46,10 @@ namespace BetterDay.Models
             return statsList;
         }
 
-        public async static Task<IEnumerable<int>> GetDaysWithUnfinishedTasks(string username, DateTime startDate, DateTime endDate)
+        public async static Task<IEnumerable<DateTime>> GetDaysWithUnfinishedTasks(string username, DateTime startDate, DateTime endDate)
         {
             IEnumerable<TaskModel> tasks = TaskModel.GetTasksBetweenDates(username, startDate, endDate).Result;
-            tasks = tasks.Where(task => task.Status == false);
-            IEnumerable<int> days = tasks.Select(task => task.Date.Value.Day).Distinct();
-            return days;
+            return tasks.Where(task => task.Status == false).Select(task => (DateTime)task.Date).Distinct();
         }
-        
-
-
     }
 }

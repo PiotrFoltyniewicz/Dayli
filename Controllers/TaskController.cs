@@ -72,7 +72,7 @@ namespace BetterDay.Controllers
         }
 
         [HttpGet("stats/calendar/{startDate}:{endDate}")]
-        public async Task<IEnumerable<int>> GetDaysWithUnfinishedTasks(int interval, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<DateTime>> GetDaysWithUnfinishedTasks(int interval, DateTime startDate, DateTime endDate)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
             return await TaskStatsModel.GetDaysWithUnfinishedTasks(currUser, startDate, endDate);
