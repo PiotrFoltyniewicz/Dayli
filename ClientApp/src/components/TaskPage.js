@@ -178,7 +178,7 @@ function TaskPage() {
     function highlightCalendarTiles({ date, view }) {
         for (let day of daysWithTasks) {
             if (date.getTime() === day.getTime()) {
-                return 'calendarTile--tasksNotDone';
+                return <div className='calendarTile--tasksNotDone' ></div>;
             }
         }
     }
@@ -198,7 +198,7 @@ function TaskPage() {
                     className='taskPage--calendar'
                     onChange={setChosenDate}
                     onActiveStartDateChange={onCalendarMonthChange}
-                    tileClassName={highlightCalendarTiles} />
+                    tileContent={highlightCalendarTiles} />
                 <section className='taskPage--main--taskList'>
                     <h3>{`Tasks for ${chosenDate.getUTCDate()} ${convertToMonthName(chosenDate.getUTCMonth())} ${chosenDate.getUTCFullYear()}`}</h3>
                     {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}                                     
