@@ -71,7 +71,6 @@ function TaskPage() {
     }
 
     async function getDaysWithTasks(date) {
-        console.log(`${date.getFullYear()}-${ date.getMonth() + 1 }-${ 1 }`)
         let response = await fetch(`/api/task/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
             headers: {
@@ -201,8 +200,11 @@ function TaskPage() {
                     tileContent={highlightCalendarTiles} />
                 <section className='taskPage--main--taskList'>
                     <h3>{`Tasks for ${chosenDate.getUTCDate()} ${convertToMonthName(chosenDate.getUTCMonth())} ${chosenDate.getUTCFullYear()}`}</h3>
-                    {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}                                     
-                    <button>Add task</button>
+                    {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}   
+                    <div className='taskPage--main--addTask'>
+                        <input className='taskPage--main--addTask--text' type='text' />
+                        <input className='taskPage--main--addTask--button' type='submit' value='+'/>
+                    </div>
                 </section>
                 <section className='taskPage--main--stats'>
                     <h3>Tasks completed today</h3>
