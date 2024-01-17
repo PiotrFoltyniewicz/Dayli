@@ -1,6 +1,6 @@
 import { useAuth } from '../contexts/AuthContext'
 import { Calendar } from 'react-calendar'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import 'react-calendar/dist/Calendar.css';
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css';
@@ -15,6 +15,8 @@ function TaskPage() {
     const [weekStats, setWeekStats] = useState(null);
     const [monthStats, setMonthStats] = useState(null);
     const [daysWithTasks, setDaysWithTasks] = useState([]);
+    const [newTask, setNewTask] = useState('')
+    const newTaskTextRef = useRef(null)
 
 
     async function getTodayStats() {
@@ -86,23 +88,22 @@ function TaskPage() {
         }
     }
 
-    useEffect(() => {
-        async function getTasks() {
-            const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
+    async function getTasks() {
+        const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
 
-            if (taskResponse.ok) {
-                const taskData = await taskResponse.json();
-                setTasks(taskData);
-            }
+        if (taskResponse.ok) {
+            const taskData = await taskResponse.json();
+            setTasks(taskData);
         }
-        
+    }
 
+    useEffect(() => {
         getTasks();
         getTodayStats();
         getWeekStats();
@@ -186,11 +187,48 @@ function TaskPage() {
         getDaysWithTasks(activeStartDate);
     }
 
+    function handleAddTaskChange(event) {
+        setNewTask(event.target.value)
+    }
+
+    async function handleNewTaskSubmit() {
+        if (newTask.length ===  0) {
+            alert("Task description can't be empty")
+            return;
+        }
+        const task = {
+            id: 0,
+            date: chosenDate,
+            title: newTask,
+            status: false
+        };
+        console.log(task)
+        const response = await fetch('/api/task/create', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task),
+        });
+        if (!response.ok) {
+            console.log('Error')
+        }
+        setNewTask('');
+        newTaskTextRef.current.value = '';
+        getTasks();
+        getTodayStats();
+        getWeekStats();
+        getMonthStats();
+    }
+    
+
+
     return (
         <div className='taskPage'>
             <header className='taskPage--header'>
                 <h1>Welcome to the Task Page</h1>
-                <h2>{`Today is ${currentDate.getUTCDate()} ${convertToMonthName(currentDate.getUTCMonth())} ${currentDate.getUTCFullYear()}`}</h2>
+                <h2>{`Today is ${currentDate.getDate()} ${convertToMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`}</h2>
             </header>
             <main className='taskPage--main'>
                 <Calendar
@@ -199,11 +237,11 @@ function TaskPage() {
                     onActiveStartDateChange={onCalendarMonthChange}
                     tileContent={highlightCalendarTiles} />
                 <section className='taskPage--main--taskList'>
-                    <h3>{`Tasks for ${chosenDate.getUTCDate()} ${convertToMonthName(chosenDate.getUTCMonth())} ${chosenDate.getUTCFullYear()}`}</h3>
+                    <h3>{`Tasks for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}   
                     <div className='taskPage--main--addTask'>
-                        <input className='taskPage--main--addTask--text' type='text' />
-                        <input className='taskPage--main--addTask--button' type='submit' value='+'/>
+                        <input className='taskPage--main--addTask--text' ref={newTaskTextRef} type='text' onChange={handleAddTaskChange} />
+                        <input className='taskPage--main--addTask--button' type='submit' value='+' onClick={handleNewTaskSubmit} />
                     </div>
                 </section>
                 <section className='taskPage--main--stats'>

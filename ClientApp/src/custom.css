@@ -357,8 +357,8 @@ body {
     background-color: silver;
     border-radius: 10px;
     border: none;
-    font-size: 1.0em;
-    height: 1.5em;
+    font-size: 0.8em;
+    height: 1.75em;
 }
 
 .taskPage--main--addTask--button {

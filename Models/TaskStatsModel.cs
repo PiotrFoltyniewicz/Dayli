@@ -27,7 +27,7 @@ namespace BetterDay.Models
             }
             else
             {
-                stats.percentage = (float)stats.tasksDone / (float)stats.totalTasks;
+                stats.percentage = (float)Math.Round(((double)stats.tasksDone / (double)stats.totalTasks),2);
             }
             return stats;
         }

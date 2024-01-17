@@ -14,7 +14,6 @@ function LoginForm() {
     function handleSubmit(event) {
         event.preventDefault()
         const { username, password } = pass
-        console.log(username, password)
 
         loginMethod(username, password, loginToken, setPass)
         
