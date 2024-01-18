@@ -146,6 +146,7 @@ function TaskPage() {
             <label key={task.id} className='taskElement'>
                 <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
                 {task.title}
+                <input type='submit' className='taskElement--deleteButton'value='x' onClick={() => handleDeleteTask(task.id)} />
             </label>))
     }
 
@@ -198,11 +199,10 @@ function TaskPage() {
         }
         const task = {
             id: 0,
-            date: chosenDate,
+            date: new Date(chosenDate.toLocaleDateString()),
             title: newTask,
             status: false
         };
-        console.log(task)
         const response = await fetch('/api/task/create', {
             method: 'PUT',
             headers: {
@@ -222,7 +222,21 @@ function TaskPage() {
         getMonthStats();
     }
     
-
+    async function handleDeleteTask(id) {
+        const response = await fetch(`/api/task/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            console.log('Error')
+        }
+        getTasks();
+        getTodayStats();
+        getWeekStats();
+        getMonthStats();
+    }
 
     return (
         <div className='taskPage'>
@@ -251,7 +265,7 @@ function TaskPage() {
                             className='taskPage--main--stats--circleProgressbar'
                             value={todayStats.tasksDone}
                             maxValue={todayStats.totalTasks}
-                            text={`${todayStats.percentage * 100}%`}
+                            text={`${Math.round(todayStats.percentage * 100)}%`}
                         />}
                     <h3>Tasks completed this week</h3>
                     {weekStats === null || weekStats.totalTasks === 0 ? 'There are no tasks' :
@@ -259,7 +273,7 @@ function TaskPage() {
                             className='taskPage--main--stats--circleProgressbar'
                             value={weekStats.tasksDone}
                             maxValue={weekStats.totalTasks}
-                            text={`${weekStats.percentage * 100}%`}
+                            text={`${Math.round(weekStats.percentage * 100)}%`}
                         />}
                         
                     <h3>Tasks completed this month</h3>
@@ -268,7 +282,7 @@ function TaskPage() {
                             className='taskPage--main--stats--circleProgressbar'
                             value={monthStats.tasksDone}
                             maxValue={monthStats.totalTasks}
-                            text={`${monthStats.percentage * 100}%`}
+                            text={`${Math.round(monthStats.percentage * 100)}%`}
                         />}
                 </section>
             </main>
