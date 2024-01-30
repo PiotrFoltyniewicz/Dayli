@@ -5,75 +5,20 @@ import 'react-calendar/dist/Calendar.css';
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css';
 
-function TaskPage() {
+function NotePage() {
 
     const { token } = useAuth();
     const [chosenDate, setChosenDate] = useState(new Date());
     const currentDate = new Date();
-    const [tasks, setTasks] = useState([]);
-    const [todayStats, setTodayStats] = useState(null);
-    const [weekStats, setWeekStats] = useState(null);
-    const [monthStats, setMonthStats] = useState(null);
-    const [daysWithTasks, setDaysWithTasks] = useState([]);
-    const [newTask, setNewTask] = useState('')
-    const newTaskTextRef = useRef(null)
+    const [notes, setNotes] = useState([]);
+    const [daysWithNotes, setDaysWithNotes] = useState([]);
+    const [newNote, setNewNote] = useState('')
+    const newNoteTextRef = useRef(null)
 
 
-    async function getTodayStats() {
-        let currentDate = new Date();
 
-        let response = await fetch(`/api/task/stats/${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
-
-        if (response.ok) {
-            let data = await response.json();
-            setTodayStats(data);
-        }
-    }
-
-    async function getWeekStats() {
-        let currentDate = new Date();
-        let prevDate = new Date(new Date().setDate(new Date().getDate() - 7));
-
-        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
-
-        if (response.ok) {
-            let data = await response.json();
-            setWeekStats(data);
-        }
-    }
-
-    async function getMonthStats() {
-        let currentDate = new Date();
-        let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
-
-        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
-
-        if (response.ok) {
-            let data = await response.json();
-            setMonthStats(data);
-        }
-    }
-
-    async function getDaysWithTasks(date) {
-        let response = await fetch(`/api/task/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
+    async function getDaysWithNotes(date) {
+        let response = await fetch(`/api/note/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,12 +29,12 @@ function TaskPage() {
         if (response.ok) {
             let data = await response.json();
             data = data.map(date => new Date(date))
-            setDaysWithTasks(data);
+            setDaysWithNotes(data);
         }
     }
 
-    async function getTasks() {
-        const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
+    async function getNotes() {
+        const noteResponse = await fetch(`/api/note/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -97,19 +42,17 @@ function TaskPage() {
             },
         });
 
-        if (taskResponse.ok) {
-            const taskData = await taskResponse.json();
-            setTasks(taskData);
+        if (noteResponse.ok) {
+            const noteData = await noteResponse.json();
+            setNotes(noteData);
         }
     }
 
     useEffect(() => {
-        getTasks();
-        getTodayStats();
-        getWeekStats();
-        getMonthStats();
-        getDaysWithTasks(chosenDate);
+        getNotes();
+        getDaysWithNotes(chosenDate);
     }, [chosenDate]);
+
     function convertToMonthName(n) {
         switch (n) {
             case 0:
@@ -141,89 +84,81 @@ function TaskPage() {
         }
     }
 
-    function renderTasks() {
-        return tasks.map(task => (
-            <label key={task.id} className='taskElement'>
-                <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
-                {task.title}
-                <input type='submit' className='taskElement--deleteButton'value='x' onClick={() => handleDeleteTask(task.id)} />
+    function renderNotes() {
+        return notes.map(note => (
+            <label key={note.id} className='noteElement'>
+                <input type='checkbox' defaultChecked={note.status} onChange={() => changeNoteStatus(note.id)} />
+                {note.title}
+                <input type='submit' className='noteElement--deleteButton'value='x' onClick={() => handleDeleteNote(note.id)} />
             </label>))
     }
 
-    async function changeTaskStatus(id) {
-        setTasks(prev => {
-            return prev.map(task => task.id === id ? { ...task, status: !task.status } : task)
+    async function changeNoteStatus(id) {
+        setNotes(prev => {
+            return prev.map(note => note.id === id ? { ...note, status: !note.status } : note)
         });
 
-        let updatedTask = {};
-        for (let task of tasks) {
-            if (task.id === id) {
-                updatedTask = { ...task, status: !task.status }
+        let updatedNote = {};
+        for (let note of notes) {
+            if (note.id === id) {
+                updatedNote = { ...note, status: !note.status }
                 break;
             }
         }
-        const response = await fetch(`/api/task/update/${id}`, {
+        const response = await fetch(`/api/note/update/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(updatedTask)
+            body: JSON.stringify(updatedNote)
         });
-
-        getTodayStats();
-        getWeekStats();
-        getMonthStats();
     }
 
     function highlightCalendarTiles({ date, view }) {
-        for (let day of daysWithTasks) {
+        for (let day of daysWithNotes) {
             if (date.getTime() === day.getTime()) {
-                return <div className='calendarTile--tasksNotDone' ></div>;
+                return <div className='calendarTile--daysWithNotes' ></div>;
             }
         }
     }
 
     function onCalendarMonthChange({ action, activeStartDate, value, view }) {
-        getDaysWithTasks(activeStartDate);
+        getDaysWithNotes(activeStartDate);
     }
 
-    function handleAddTaskChange(event) {
-        setNewTask(event.target.value)
+    function handleAddNoteChange(event) {
+        setNewNote(event.target.value)
     }
 
-    async function handleNewTaskSubmit() {
-        if (newTask.length ===  0) {
-            alert("Task description can't be empty")
+    async function handleNewNoteSubmit() {
+        if (newNote.length ===  0) {
+            alert("note description can't be empty")
             return;
         }
-        const task = {
+        const note = {
             id: 0,
             date: new Date(chosenDate.toLocaleDateString()),
-            title: newTask,
-            status: false
+            note: newNote
         };
-        const response = await fetch('/api/task/create', {
+        const response = await fetch('/api/note/create', {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(task),
+            body: JSON.stringify(note),
         });
         if (!response.ok) {
             console.log('Error')
         }
-        setNewTask('');
-        newTaskTextRef.current.value = '';
-        getTasks();
-        getTodayStats();
-        getWeekStats();
-        getMonthStats();
+        setNewNote('');
+        newNoteTextRef.current.value = '';
+        getNotes();
     }
     
-    async function handleDeleteTask(id) {
-        const response = await fetch(`/api/task/delete/${id}`, {
+    async function handleDeleteNote(id) {
+        const response = await fetch(`/api/note/delete/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -232,63 +167,34 @@ function TaskPage() {
         if (!response.ok) {
             console.log('Error')
         }
-        getTasks();
-        getTodayStats();
-        getWeekStats();
-        getMonthStats();
+        getNotes();
     }
 
     return (
-        <div className='taskPage'>
-            <header className='taskPage--header'>
-                <h1>Welcome to the Task Page</h1>
+        <div className='notePage'>
+            <header className='notePage--header'>
+                <h1>Welcome to the note Page</h1>
                 <h2>{`Today is ${currentDate.getDate()} ${convertToMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`}</h2>
             </header>
-            <main className='taskPage--main'>
+            <main className='notePage--main'>
                 <Calendar
-                    className='taskPage--calendar'
+                    className='notePage--calendar'
                     onChange={setChosenDate}
                     onActiveStartDateChange={onCalendarMonthChange}
                     tileContent={highlightCalendarTiles} />
-                <section className='taskPage--main--taskList'>
-                    <h3>{`Tasks for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
-                    {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}   
-                    <div className='taskPage--main--addTask'>
-                        <input className='taskPage--main--addTask--text' ref={newTaskTextRef} type='text' onChange={handleAddTaskChange} />
-                        <input className='taskPage--main--addTask--button' type='submit' value='+' onClick={handleNewTaskSubmit} />
+                <section className='notePage--main--noteList'>
+                    <h3>{`Notes for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
+                    {notes.length > 0 ? renderNotes() : 'There are no notes'}   
+                    <div className='notePage--main--addNote'>
+                        <textarea className='notePage--main--addNote--text' ref={newNoteTextRef} onChange={handleAddNoteChange} />
+                        <input className='notePage--main--addNote--button' type='submit' value='+' onClick={handleNewNoteSubmit} />
                     </div>
                 </section>
-                <section className='taskPage--main--stats'>
-                    <h3>Tasks completed today</h3>
-                {todayStats === null || todayStats.totalTasks === 0 ? 'There are no tasks' :
-                        <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={todayStats.tasksDone}
-                            maxValue={todayStats.totalTasks}
-                            text={`${Math.round(todayStats.percentage * 100)}%`}
-                        />}
-                    <h3>Tasks completed this week</h3>
-                    {weekStats === null || weekStats.totalTasks === 0 ? 'There are no tasks' :
-                        <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={weekStats.tasksDone}
-                            maxValue={weekStats.totalTasks}
-                            text={`${Math.round(weekStats.percentage * 100)}%`}
-                        />}
-                        
-                    <h3>Tasks completed this month</h3>
-                    {monthStats === null || monthStats.totalTasks === 0 ? 'There are no tasks' :
-                        <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={monthStats.tasksDone}
-                            maxValue={monthStats.totalTasks}
-                            text={`${Math.round(monthStats.percentage * 100)}%`}
-                        />}
+                <section className='notePage--main--pinnedNotes'>
+                    <h3>Pinned notes</h3>
+                
                 </section>
             </main>
-            <section className='task-Page--advancedStats'>
-                <h1>Advanced statistics</h1>
-            </section>
         </div>)
 }
-export default TaskPage
+export default NotePage

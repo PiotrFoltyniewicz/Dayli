@@ -5,24 +5,24 @@ import 'react-calendar/dist/Calendar.css';
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css';
 
-function TaskPage() {
+function HabitPage() {
 
     const { token } = useAuth();
     const [chosenDate, setChosenDate] = useState(new Date());
     const currentDate = new Date();
-    const [tasks, setTasks] = useState([]);
+    const [habits, sethabits] = useState([]);
     const [todayStats, setTodayStats] = useState(null);
     const [weekStats, setWeekStats] = useState(null);
     const [monthStats, setMonthStats] = useState(null);
-    const [daysWithTasks, setDaysWithTasks] = useState([]);
-    const [newTask, setNewTask] = useState('')
-    const newTaskTextRef = useRef(null)
+    const [daysWithhabits, setDaysWithhabits] = useState([]);
+    const [newhabit, setNewhabit] = useState('')
+    const newhabitTextRef = useRef(null)
 
 
     async function getTodayStats() {
         let currentDate = new Date();
 
-        let response = await fetch(`/api/task/stats/${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+        let response = await fetch(`/api/habit/stats/${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ function TaskPage() {
         let currentDate = new Date();
         let prevDate = new Date(new Date().setDate(new Date().getDate() - 7));
 
-        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+        let response = await fetch(`/api/habit/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function TaskPage() {
         let currentDate = new Date();
         let prevDate = new Date(new Date().setDate(new Date().getDate() - 30));
 
-        let response = await fetch(`/api/task/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
+        let response = await fetch(`/api/habit/stats/${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}:${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,8 +72,8 @@ function TaskPage() {
         }
     }
 
-    async function getDaysWithTasks(date) {
-        let response = await fetch(`/api/task/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
+    async function getDaysWithhabits(date) {
+        let response = await fetch(`/api/habit/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,12 +84,12 @@ function TaskPage() {
         if (response.ok) {
             let data = await response.json();
             data = data.map(date => new Date(date))
-            setDaysWithTasks(data);
+            setDaysWithhabits(data);
         }
     }
 
-    async function getTasks() {
-        const taskResponse = await fetch(`/api/task/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
+    async function gethabits() {
+        const habitResponse = await fetch(`/api/habit/${chosenDate.getFullYear()}-${chosenDate.getMonth() + 1}-${chosenDate.getDate()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -97,18 +97,18 @@ function TaskPage() {
             },
         });
 
-        if (taskResponse.ok) {
-            const taskData = await taskResponse.json();
-            setTasks(taskData);
+        if (habitResponse.ok) {
+            const habitData = await habitResponse.json();
+            sethabits(habitData);
         }
     }
 
     useEffect(() => {
-        getTasks();
+        gethabits();
         getTodayStats();
         getWeekStats();
         getMonthStats();
-        getDaysWithTasks(chosenDate);
+        getDaysWithhabits(chosenDate);
     }, [chosenDate]);
     function convertToMonthName(n) {
         switch (n) {
@@ -141,34 +141,34 @@ function TaskPage() {
         }
     }
 
-    function renderTasks() {
-        return tasks.map(task => (
-            <label key={task.id} className='taskElement'>
-                <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
-                {task.title}
-                <input type='submit' className='taskElement--deleteButton'value='x' onClick={() => handleDeleteTask(task.id)} />
+    function renderhabits() {
+        return habits.map(habit => (
+            <label key={habit.id} className='habitElement'>
+                <input type='checkbox' defaultChecked={habit.status} onChange={() => changehabitStatus(habit.id)} />
+                {habit.title}
+                <input type='submit' className='habitElement--deleteButton'value='x' onClick={() => handleDeletehabit(habit.id)} />
             </label>))
     }
 
-    async function changeTaskStatus(id) {
-        setTasks(prev => {
-            return prev.map(task => task.id === id ? { ...task, status: !task.status } : task)
+    async function changehabitStatus(id) {
+        sethabits(prev => {
+            return prev.map(habit => habit.id === id ? { ...habit, status: !habit.status } : habit)
         });
 
-        let updatedTask = {};
-        for (let task of tasks) {
-            if (task.id === id) {
-                updatedTask = { ...task, status: !task.status }
+        let updatedhabit = {};
+        for (let habit of habits) {
+            if (habit.id === id) {
+                updatedhabit = { ...habit, status: !habit.status }
                 break;
             }
         }
-        const response = await fetch(`/api/task/update/${id}`, {
+        const response = await fetch(`/api/habit/update/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(updatedTask)
+            body: JSON.stringify(updatedhabit)
         });
 
         getTodayStats();
@@ -177,53 +177,53 @@ function TaskPage() {
     }
 
     function highlightCalendarTiles({ date, view }) {
-        for (let day of daysWithTasks) {
+        for (let day of daysWithhabits) {
             if (date.getTime() === day.getTime()) {
-                return <div className='calendarTile--tasksNotDone' ></div>;
+                return <div className='calendarTile--habitsNotDone' ></div>;
             }
         }
     }
 
     function onCalendarMonthChange({ action, activeStartDate, value, view }) {
-        getDaysWithTasks(activeStartDate);
+        getDaysWithhabits(activeStartDate);
     }
 
-    function handleAddTaskChange(event) {
-        setNewTask(event.target.value)
+    function handleAddhabitChange(event) {
+        setNewhabit(event.target.value)
     }
 
-    async function handleNewTaskSubmit() {
-        if (newTask.length ===  0) {
-            alert("Task description can't be empty")
+    async function handleNewhabitSubmit() {
+        if (newhabit.length ===  0) {
+            alert("habit description can't be empty")
             return;
         }
-        const task = {
+        const habit = {
             id: 0,
             date: new Date(chosenDate.toLocaleDateString()),
-            title: newTask,
+            title: newhabit,
             status: false
         };
-        const response = await fetch('/api/task/create', {
+        const response = await fetch('/api/habit/create', {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(task),
+            body: JSON.stringify(habit),
         });
         if (!response.ok) {
             console.log('Error')
         }
-        setNewTask('');
-        newTaskTextRef.current.value = '';
-        getTasks();
+        setNewhabit('');
+        newhabitTextRef.current.value = '';
+        gethabits();
         getTodayStats();
         getWeekStats();
         getMonthStats();
     }
     
-    async function handleDeleteTask(id) {
-        const response = await fetch(`/api/task/delete/${id}`, {
+    async function handleDeletehabit(id) {
+        const response = await fetch(`/api/habit/delete/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -232,63 +232,63 @@ function TaskPage() {
         if (!response.ok) {
             console.log('Error')
         }
-        getTasks();
+        gethabits();
         getTodayStats();
         getWeekStats();
         getMonthStats();
     }
 
     return (
-        <div className='taskPage'>
-            <header className='taskPage--header'>
-                <h1>Welcome to the Task Page</h1>
+        <div className='habitPage'>
+            <header className='habitPage--header'>
+                <h1>Welcome to the habit Page</h1>
                 <h2>{`Today is ${currentDate.getDate()} ${convertToMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`}</h2>
             </header>
-            <main className='taskPage--main'>
+            <main className='habitPage--main'>
                 <Calendar
-                    className='taskPage--calendar'
+                    className='habitPage--calendar'
                     onChange={setChosenDate}
                     onActiveStartDateChange={onCalendarMonthChange}
                     tileContent={highlightCalendarTiles} />
-                <section className='taskPage--main--taskList'>
-                    <h3>{`Tasks for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
-                    {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}   
-                    <div className='taskPage--main--addTask'>
-                        <input className='taskPage--main--addTask--text' ref={newTaskTextRef} type='text' onChange={handleAddTaskChange} />
-                        <input className='taskPage--main--addTask--button' type='submit' value='+' onClick={handleNewTaskSubmit} />
+                <section className='habitPage--main--habitList'>
+                    <h3>{`habits for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
+                    {habits.length > 0 ? renderhabits() : 'There is nothing we can do'}   
+                    <div className='habitPage--main--addhabit'>
+                        <input className='habitPage--main--addhabit--text' ref={newhabitTextRef} type='text' onChange={handleAddhabitChange} />
+                        <input className='habitPage--main--addhabit--button' type='submit' value='+' onClick={handleNewhabitSubmit} />
                     </div>
                 </section>
-                <section className='taskPage--main--stats'>
-                    <h3>Tasks completed today</h3>
-                {todayStats === null || todayStats.totalTasks === 0 ? 'There are no tasks' :
+                <section className='habitPage--main--stats'>
+                    <h3>habits completed today</h3>
+                {todayStats === null || todayStats.totalhabits === 0 ? 'There are no habits' :
                         <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={todayStats.tasksDone}
-                            maxValue={todayStats.totalTasks}
+                            className='habitPage--main--stats--circleProgressbar'
+                            value={todayStats.habitsDone}
+                            maxValue={todayStats.totalhabits}
                             text={`${Math.round(todayStats.percentage * 100)}%`}
                         />}
-                    <h3>Tasks completed this week</h3>
-                    {weekStats === null || weekStats.totalTasks === 0 ? 'There are no tasks' :
+                    <h3>habits completed this week</h3>
+                    {weekStats === null || weekStats.totalhabits === 0 ? 'There are no habits' :
                         <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={weekStats.tasksDone}
-                            maxValue={weekStats.totalTasks}
+                            className='habitPage--main--stats--circleProgressbar'
+                            value={weekStats.habitsDone}
+                            maxValue={weekStats.totalhabits}
                             text={`${Math.round(weekStats.percentage * 100)}%`}
                         />}
                         
-                    <h3>Tasks completed this month</h3>
-                    {monthStats === null || monthStats.totalTasks === 0 ? 'There are no tasks' :
+                    <h3>habits completed this month</h3>
+                    {monthStats === null || monthStats.totalhabits === 0 ? 'There are no habits' :
                         <CircularProgressbar
-                            className='taskPage--main--stats--circleProgressbar'
-                            value={monthStats.tasksDone}
-                            maxValue={monthStats.totalTasks}
+                            className='habitPage--main--stats--circleProgressbar'
+                            value={monthStats.habitsDone}
+                            maxValue={monthStats.totalhabits}
                             text={`${Math.round(monthStats.percentage * 100)}%`}
                         />}
                 </section>
             </main>
-            <section className='task-Page--advancedStats'>
+            <section className='habitPage--advancedStats'>
                 <h1>Advanced statistics</h1>
             </section>
         </div>)
 }
-export default TaskPage
+export default HabitPage
