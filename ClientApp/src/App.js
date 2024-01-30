@@ -6,6 +6,8 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import About from './components/About'
 import TaskPage from './components/TaskPage'
+import NotePage from './components/NotePage'
+import HabitPage from './components/HabitPage'
 import './custom.css';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -21,7 +23,9 @@ function App() {
                     <Route path="/home" element={<Home setLogPopUp={setLogPopUp} />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/task" element={<TaskPage /> } />
+                    <Route path="/task" element={<TaskPage />} />
+                    <Route path="/habit" element={<HabitPage />} />
+                    <Route path="/note" element={<NotePage />} />
                 </Routes>
                 { /*<LoremIpsum /> */ }
                 {logPopUp && <Login setLogPopUp={setLogPopUp} />}
