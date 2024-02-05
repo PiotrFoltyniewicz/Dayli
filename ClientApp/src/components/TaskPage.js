@@ -1,4 +1,4 @@
-import { useAuth } from '../contexts/AuthContext'
+﻿import { useAuth } from '../contexts/AuthContext'
 import { Calendar } from 'react-calendar'
 import { useState, useEffect, useRef } from 'react'
 import 'react-calendar/dist/Calendar.css';
@@ -146,7 +146,7 @@ function TaskPage() {
             <label key={task.id} className='taskElement'>
                 <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
                 {task.title}
-                <input type='submit' className='taskElement--deleteButton'value='x' onClick={() => handleDeleteTask(task.id)} />
+                <input type='submit' className='taskElement--deleteButton' value='❌' onClick={() => handleDeleteTask(task.id)} />
             </label>))
     }
 
@@ -255,7 +255,7 @@ function TaskPage() {
                     {tasks.length > 0 ? renderTasks() : 'There is nothing we can do'}   
                     <div className='taskPage--main--addTask'>
                         <input className='taskPage--main--addTask--text' ref={newTaskTextRef} type='text' onChange={handleAddTaskChange} />
-                        <input className='taskPage--main--addTask--button' type='submit' value='+' onClick={handleNewTaskSubmit} />
+                        <input className='taskPage--main--addTask--button' type='submit' value='➕' onClick={handleNewTaskSubmit} />
                     </div>
                 </section>
                 <section className='taskPage--main--stats'>

@@ -1,4 +1,4 @@
-import { useAuth } from '../contexts/AuthContext'
+﻿import { useAuth } from '../contexts/AuthContext'
 import { Calendar } from 'react-calendar'
 import { useState, useEffect, useRef } from 'react'
 import 'react-calendar/dist/Calendar.css';
@@ -14,9 +14,10 @@ function NotePage() {
     const [daysWithNotes, setDaysWithNotes] = useState([]);
     const [newNote, setNewNote] = useState('')
     const newNoteTextRef = useRef(null)
+    const [editedNoteId, setEditedNoteId] = useState(null)
 
 
-
+    //TODO STATS CALENDAR API
     async function getDaysWithNotes(date) {
         let response = await fetch(`/api/note/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
@@ -84,33 +85,19 @@ function NotePage() {
         }
     }
 
+    // FIX BUGGED HIGHLIGHTING OF EDIT ICON
     function renderNotes() {
         return notes.map(note => (
-            <label key={note.id} className='taskElement'>
-                {note.note}
+            <label key={note.id} className='noteElement'>
+                {editedNoteId === note.id ?
+                    <textarea className='noteElement--text' value={note.note} /> :
+                    note.note}
+
+                {editedNoteId === note.id ?
+                    <input type='submit' className='noteElement--saveButton' value='💾' onClick={() => handleSaveNote(note.id)} /> :
+                    <input type='button' className='noteElement--editButton' value='✏️' onClick={() => handleEditNote(note.id)} />}
+                <input type='submit' className='noteElement--deleteButton' value='❌' onClick={() => handleDeleteNote(note.id)} />
             </label>))
-    }
-
-    async function changeNoteStatus(id) {
-        setNotes(prev => {
-            return prev.map(note => note.id === id ? { ...note, status: !note.status } : note)
-        });
-
-        let updatedNote = {};
-        for (let note of notes) {
-            if (note.id === id) {
-                updatedNote = { ...note, status: !note.status }
-                break;
-            }
-        }
-        const response = await fetch(`/api/note/update/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(updatedNote)
-        });
     }
 
     function highlightCalendarTiles({ date, view }) {
@@ -131,7 +118,7 @@ function NotePage() {
 
     async function handleNewNoteSubmit() {
         if (newNote.length ===  0) {
-            alert("Note description can't be empty")
+            alert("Note can't be empty")
             return;
         }
         const note = {
@@ -168,6 +155,34 @@ function NotePage() {
         getNotes();
     }
 
+    //TODO
+    async function handleEditNote(id) {
+        const response = await fetch(`/api/note/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            console.log('Error')
+        }
+        getNotes();
+    }
+
+    //TODO
+    async function handleSaveNote(id) {
+        const response = await fetch(`/api/note/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            console.log('Error')
+        }
+        getNotes();
+    }
+
     return (
         <div className='notePage'>
             <header className='notePage--header'>
@@ -185,7 +200,7 @@ function NotePage() {
                     {notes.length > 0 ? renderNotes() : 'There are no notes'}   
                     <div className='notePage--main--addNote'>
                         <textarea className='notePage--main--addNote--text' ref={newNoteTextRef} onChange={handleAddNoteChange}/>
-                        <input className='notePage--main--addNote--button' type='submit' value='+' onClick={handleNewNoteSubmit} />
+                        <input className='notePage--main--addNote--button' type='submit' value='➕' onClick={handleNewNoteSubmit} />
                     </div>
                 </section>
                 <section className='notePage--main--pinnedNotes'>

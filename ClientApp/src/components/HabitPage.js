@@ -1,4 +1,4 @@
-import { useAuth } from '../contexts/AuthContext'
+﻿import { useAuth } from '../contexts/AuthContext'
 import { Calendar } from 'react-calendar'
 import { useState, useEffect, useRef } from 'react'
 import 'react-calendar/dist/Calendar.css';
@@ -146,7 +146,7 @@ function HabitPage() {
             <label key={habit.id} className='habitElement'>
                 <input type='checkbox' defaultChecked={habit.status} onChange={() => changehabitStatus(habit.id)} />
                 {habit.title}
-                <input type='submit' className='habitElement--deleteButton'value='x' onClick={() => handleDeletehabit(habit.id)} />
+                <input type='submit' className='habitElement--deleteButton' value='❌' onClick={() => handleDeletehabit(habit.id)} />
             </label>))
     }
 
@@ -255,7 +255,7 @@ function HabitPage() {
                     {habits.length > 0 ? renderhabits() : 'There is nothing we can do'}   
                     <div className='habitPage--main--addhabit'>
                         <input className='habitPage--main--addhabit--text' ref={newhabitTextRef} type='text' onChange={handleAddhabitChange} />
-                        <input className='habitPage--main--addhabit--button' type='submit' value='+' onClick={handleNewhabitSubmit} />
+                        <input className='habitPage--main--addhabit--button' type='submit' value='➕' onClick={handleNewhabitSubmit} />
                     </div>
                 </section>
                 <section className='habitPage--main--stats'>

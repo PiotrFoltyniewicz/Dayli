@@ -281,7 +281,7 @@ body {
     width: 60%;
 }
 
-.taskElement, .habitElement{
+.taskElement, .habitElement, .noteElement{
     background-color: darkgray;
     margin: 5px;
     padding: 8px 12px;
@@ -323,6 +323,17 @@ body {
     position: absolute;
     transform: translateX(200%);
     background-color: red;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.calendarTile--daysWithNotes {
+    position: absolute;
+    transform: translateX(200%);
+    background-color: green;
     border-radius: 100%;
     width: 8px;
     height: 8px;
@@ -383,7 +394,7 @@ body {
     background-color: gray;
 }
 
-.taskElement--deleteButton {
+.taskElement--deleteButton, .noteElement--deleteButton, .noteElement--editButton, .noteElement--saveButton {
     background-color: darkgray;
     border-radius: 5px;
     border: none;
@@ -393,7 +404,7 @@ body {
     font-size: 0.9em;
 }
 
-.taskElement--deleteButton:hover {
+.taskElement--deleteButton:hover, .noteElement--deleteButton:hover, .noteElement--editButton:hover, .noteElement--saveButton:hover {
     background-color: gray;
 }
 
