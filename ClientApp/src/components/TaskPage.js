@@ -199,7 +199,7 @@ function TaskPage() {
         }
         const task = {
             id: 0,
-            date: new Date(chosenDate.toLocaleDateString()),
+            date: new Date(chosenDate.toLocaleDateString("zu-ZA")),
             title: newTask,
             status: false
         };

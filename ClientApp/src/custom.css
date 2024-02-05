@@ -294,25 +294,25 @@ body {
     width: 40%;
 }
 
-.taskPage{
+.taskPage, .habitPage, .notePage{
     display: flex;
     flex-direction: column;
 }
 
-.taskPage--header{
+.taskPage--header, .habitPage--header, .notePage--header {
     display: flex;
     align-items: center;
     flex-direction: column;
     padding: 0px 20px 0px 20px;
 }
-.taskPage--header h2{
+.taskPage--header h2, .habitPage--header h2, .notePage--header h2 {
     margin-top: 0px;
 }
-.taskPage--header h1 {
+.taskPage--header h1, .habitPage--header h1, .notePage--header h1 {
     margin-bottom: 0px;
 }
 
-.taskPage--calendar{
+.taskPage--calendar, .habitPage--calendar, .notePage--calendar {
     border-radius: 20px;
     min-width: 220px;
     max-height: 300px;
@@ -330,7 +330,7 @@ body {
     padding: 0px;
 }
 
-.taskPage--main {
+.taskPage--main, .taskPage--main, .notePage--main {
     display: flex;
     flex-direction: row;
     margin: 0px 30px;
@@ -339,7 +339,7 @@ body {
     border-radius: 20px;
 }
 
-.taskPage--main--addTask {
+.taskPage--main--addTask, .notePage--main--addNote {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -351,7 +351,17 @@ body {
     font-size: 1.0em;
 }
 
-.taskPage--main--addTask--text {
+.notePage--main--addNote{
+    min-width: 40%;
+    min-height: 40%;
+}
+
+.notePage--main--addNote--text {
+    min-width: 85%;
+    min-height: 95%;
+}
+
+.taskPage--main--addTask--text, .notePage--main--addNote--text {
     background-color: silver;
     border-radius: 10px;
     border: none;
@@ -359,7 +369,7 @@ body {
     height: 1.75em;
 }
 
-.taskPage--main--addTask--button {
+.taskPage--main--addTask--button, .notePage--main--addNote--button {
     background-color: darkgray;
     border-radius: 10px;
     border: none;
@@ -369,7 +379,7 @@ body {
     height: 1.5em;
 }
 
-.taskPage--main--addTask--button:hover {
+.taskPage--main--addTask--button:hover, .notePage--main--addNote--button:hover {
     background-color: gray;
 }
 
@@ -387,7 +397,7 @@ body {
     background-color: gray;
 }
 
-.taskPage--main--taskList {
+.taskPage--main--taskList, .notePage--main--noteList, .taskPage--main--taskList {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -400,7 +410,7 @@ body {
     font-size: 1.2em;
 }
 
-.taskPage--main--stats {
+.taskPage--main--stats, .habitPage--main--stats {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -414,7 +424,7 @@ body {
     font-size: 1.2em;
 }
 
-.taskPage--main--stats--circleProgressbar{
+.taskPage--main--stats--circleProgressbar, .habitPage--main--stats--circleProgressbar {
     width: 25%;
 }
 /* Responsive design */

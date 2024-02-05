@@ -66,7 +66,7 @@ namespace BetterDay.Models
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
-            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Title, n.Status
+            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Note
                                             FROM notes AS n
                                             INNER JOIN users AS u
                                             ON n.UserID = u.ID

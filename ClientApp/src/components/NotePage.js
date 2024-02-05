@@ -86,10 +86,8 @@ function NotePage() {
 
     function renderNotes() {
         return notes.map(note => (
-            <label key={note.id} className='noteElement'>
-                <input type='checkbox' defaultChecked={note.status} onChange={() => changeNoteStatus(note.id)} />
-                {note.title}
-                <input type='submit' className='noteElement--deleteButton'value='x' onClick={() => handleDeleteNote(note.id)} />
+            <label key={note.id} className='taskElement'>
+                {note.note}
             </label>))
     }
 
@@ -133,12 +131,12 @@ function NotePage() {
 
     async function handleNewNoteSubmit() {
         if (newNote.length ===  0) {
-            alert("note description can't be empty")
+            alert("Note description can't be empty")
             return;
         }
         const note = {
             id: 0,
-            date: new Date(chosenDate.toLocaleDateString()),
+            date: new Date(chosenDate.toLocaleDateString("zu-ZA")),
             note: newNote
         };
         const response = await fetch('/api/note/create', {
@@ -186,7 +184,7 @@ function NotePage() {
                     <h3>{`Notes for ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     {notes.length > 0 ? renderNotes() : 'There are no notes'}   
                     <div className='notePage--main--addNote'>
-                        <textarea className='notePage--main--addNote--text' ref={newNoteTextRef} onChange={handleAddNoteChange} />
+                        <textarea className='notePage--main--addNote--text' ref={newNoteTextRef} onChange={handleAddNoteChange}/>
                         <input className='notePage--main--addNote--button' type='submit' value='+' onClick={handleNewNoteSubmit} />
                     </div>
                 </section>
