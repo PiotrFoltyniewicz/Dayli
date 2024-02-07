@@ -54,5 +54,12 @@ namespace BetterDay.Controllers
             var result = await NoteModel.DeleteNote(currUser, id);
             return new JsonResult(result);
         }
+
+        [HttpGet("stats/calendar/{startDate}:{endDate}")]
+        public async Task<IEnumerable<DateTime>> GetDaysWithNotes(int interval, DateTime startDate, DateTime endDate)
+        {
+            string currUser = TokenHandler.GetCurrentUser(User.Claims);
+            return await NoteStatsModel.GetDaysWithNotes(currUser, startDate, endDate);
+        }
     }
 }

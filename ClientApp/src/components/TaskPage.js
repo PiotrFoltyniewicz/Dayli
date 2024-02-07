@@ -143,11 +143,11 @@ function TaskPage() {
 
     function renderTasks() {
         return tasks.map(task => (
-            <label key={task.id} className='taskElement'>
+            <div key={task.id} className='taskElement'>
                 <input type='checkbox' defaultChecked={task.status} onChange={() => changeTaskStatus(task.id)} />
                 {task.title}
                 <input type='submit' className='taskElement--deleteButton' value='❌' onClick={() => handleDeleteTask(task.id)} />
-            </label>))
+            </div>))
     }
 
     async function changeTaskStatus(id) {

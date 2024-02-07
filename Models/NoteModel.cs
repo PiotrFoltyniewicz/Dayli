@@ -83,6 +83,28 @@ namespace BetterDay.Models
             return notes;
         }
 
+        public async static Task<IEnumerable<NoteModel>> GetNotesBetweenDates(string username, DateTime startDate, DateTime endDate)
+        {
+            var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
+            await connection.OpenAsync();
+
+            var query = new MySqlCommand(@$"SELECT n.Id, n.Date, n.Note
+                                            FROM notes AS n
+                                            INNER JOIN users AS u
+                                            ON n.UserID = u.ID
+                                            WHERE u.Username = '{username}' AND DATE(Date) BETWEEN '{startDate.ToString("yyyy-MM-dd")}' AND '{endDate.ToString("yyyy-MM-dd")}';", connection);
+            var reader = await query.ExecuteReaderAsync();
+
+            List<NoteModel> notes = new List<NoteModel>();
+            while (await reader.ReadAsync())
+            {
+                notes.Add(new NoteModel((int)reader[0], (DateTime)reader[1], (string)reader[2]));
+            }
+            await reader.CloseAsync();
+            await connection.CloseAsync();
+            return notes;
+        }
+
         public async static Task<ApiError> CreateNote(string username, NoteModel note)
         {
             ApiError response;

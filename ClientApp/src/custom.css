@@ -372,7 +372,7 @@ body {
     min-height: 95%;
 }
 
-.taskPage--main--addTask--text, .notePage--main--addNote--text {
+.taskPage--main--addTask--text, .notePage--main--addNote--text, .noteElement--text {
     background-color: silver;
     border-radius: 10px;
     border: none;

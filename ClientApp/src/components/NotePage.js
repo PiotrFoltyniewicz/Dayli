@@ -17,7 +17,6 @@ function NotePage() {
     const [editedNoteId, setEditedNoteId] = useState(null)
 
 
-    //TODO STATS CALENDAR API
     async function getDaysWithNotes(date) {
         let response = await fetch(`/api/note/stats/calendar/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
             method: 'GET',
@@ -85,19 +84,18 @@ function NotePage() {
         }
     }
 
-    // FIX BUGGED HIGHLIGHTING OF EDIT ICON
     function renderNotes() {
         return notes.map(note => (
-            <label key={note.id} className='noteElement'>
+            <div key={note.id} className='noteElement'>
                 {editedNoteId === note.id ?
-                    <textarea className='noteElement--text' value={note.note} /> :
+                    <textarea className='noteElement--text' value={note.note} onChange={(event) => handleEditNoteChange(event, note.id)} /> :
                     note.note}
 
                 {editedNoteId === note.id ?
                     <input type='submit' className='noteElement--saveButton' value='💾' onClick={() => handleSaveNote(note.id)} /> :
                     <input type='button' className='noteElement--editButton' value='✏️' onClick={() => handleEditNote(note.id)} />}
                 <input type='submit' className='noteElement--deleteButton' value='❌' onClick={() => handleDeleteNote(note.id)} />
-            </label>))
+            </div>))
     }
 
     function highlightCalendarTiles({ date, view }) {
@@ -155,31 +153,41 @@ function NotePage() {
         getNotes();
     }
 
-    //TODO
     async function handleEditNote(id) {
-        const response = await fetch(`/api/note/delete/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+        setEditedNoteId(id)
+    }
+
+    function handleEditNoteChange(event, id) {
+        setNotes(prev => {
+            return prev.map(note => note.id === id ? { ...note, note: event.target.value } : note)
         });
-        if (!response.ok) {
-            console.log('Error')
-        }
-        getNotes();
     }
 
     //TODO
     async function handleSaveNote(id) {
-        const response = await fetch(`/api/note/delete/${id}`, {
-            method: 'DELETE',
+        let note = null;
+        for (let temp of notes) {
+            if (temp.id === id) {
+                note = temp;
+                break;
+            }
+        }
+        if (note.note.length === 0) {
+            alert('Note can\'t be empty');
+            return;
+        }
+        const response = await fetch(`/api/note/update/${id}`, {
+            method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
+            body: JSON.stringify(note),
         });
         if (!response.ok) {
-            console.log('Error')
+            console.log('Error');
         }
+        setEditedNoteId(null);
         getNotes();
     }
 
