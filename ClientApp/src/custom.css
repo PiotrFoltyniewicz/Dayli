@@ -319,7 +319,7 @@ body {
     margin-top: 15px;
 }
 
-.calendarTile--tasksNotDone{
+.calendarTile--tasksNotDone, .calendarTile--habitsNotDone {
     position: absolute;
     transform: translateX(200%);
     background-color: red;
@@ -341,7 +341,7 @@ body {
     padding: 0px;
 }
 
-.taskPage--main, .taskPage--main, .notePage--main {
+.taskPage--main, .taskPage--main, .notePage--main, .habitPage--main {
     display: flex;
     flex-direction: row;
     margin: 0px 30px;
@@ -350,7 +350,7 @@ body {
     border-radius: 20px;
 }
 
-.taskPage--main--addTask, .notePage--main--addNote {
+.taskPage--main--addTask, .notePage--main--addNote{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -408,7 +408,7 @@ body {
     background-color: gray;
 }
 
-.taskPage--main--taskList, .notePage--main--noteList, .taskPage--main--taskList {
+.taskPage--main--taskList, .notePage--main--noteList, .taskPage--main--taskList, .habitPage--main--habitList {
     display: flex;
     flex-direction: column;
     align-items: center;
