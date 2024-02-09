@@ -4,18 +4,14 @@ import { useState, useEffect, useRef } from 'react'
 import 'react-calendar/dist/Calendar.css';
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css';
+import HabitRow from './HabitRow';
 
 function HabitPage() {
 
     const { token } = useAuth();
-    const [chosenDate, setChosenDate] = useState(new Date());
-    const currentDate = new Date();
+    const chosenDate = new Date();
     const [habits, setHabits] = useState([]);
-    const [todayStats, setTodayStats] = useState(null);
-    const [weekStats, setWeekStats] = useState(null);
-    const [monthStats, setMonthStats] = useState(null);
-    const [newHabit, setNewHabit] = useState('')
-    const newHabitTextRef = useRef(null)
+    const [habitList, setHabitList] = useState([]);
 
     async function getHabits() {
         const date = chosenDate;
@@ -33,9 +29,25 @@ function HabitPage() {
         }
     }
 
+    async function getHabitList() {
+        const habitListResponse = await fetch(`/api/habitList`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (habitListResponse.ok) {
+            const habitListData = await habitListResponse.json();
+            setHabitList(habitListData);
+        }
+    }
+
     useEffect(() => {
         getHabits();
-    }, [chosenDate]);
+        getHabitList();
+    }, []);
     function convertToMonthName(n) {
         switch (n) {
             case 0:
@@ -68,101 +80,50 @@ function HabitPage() {
     }
 
     function renderHabits() {
-        console.log(habits)
-        return habits;
+        let toRender = [];
+        for (let name of habitList) {
+            const habitsToRow = []
+            for (let habitGroup of habits) {
+                for (let habit of habitGroup.habits) {
+                    if (habit !== null && habit.title === name.title) {
+                        habitsToRow.push(habit);
+                    }
+                }
+            }
+            toRender.push(<HabitRow key={name.title} title={name.title} habits={habitsToRow} />)
+        }
+        return toRender;
     }
 
     function renderDayColumns() {
         const daysInMonth = new Date(chosenDate.getFullYear(), chosenDate.getMonth() + 1, 0).getDate()
         const toRender = []
         for (let i = 0; i < daysInMonth; i++) {
-            toRender.push(<td>{i + 1}</td>);
+            toRender.push(<th key={i}>{i + 1}</th>);
         }
         return toRender;
     }
 
-    async function changeHabitStatus(id) {
-        setHabits(prev => {
-            return prev.map(habit => habit.id === id ? { ...habit, status: !habit.status } : habit)
-        });
-
-        let updatedHabit = {};
-        for (let habit of habits) {
-            if (habit.id === id) {
-                updatedHabit = { ...habit, status: !habit.status }
-                break;
-            }
-        }
-        const response = await fetch(`/api/habit/update/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(updatedHabit)
-        });
-    }
-
-    function handleAddHabitChange(event) {
-        setNewHabit(event.target.value)
-    }
-
-    async function handleNewHabitSubmit() {
-        if (newHabit.length ===  0) {
-            alert("Habit description can't be empty")
-            return;
-        }
-        const habit = {
-            id: 0,
-            date: new Date(chosenDate.toLocaleDateString()),
-            title: newHabit,
-            status: false
-        };
-        const response = await fetch('/api/habit/create', {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(habit),
-        });
-        if (!response.ok) {
-            console.log('Error')
-        }
-        setNewHabit('');
-        newHabitTextRef.current.value = '';
-        getHabits();
-    }
-    
-    async function handleDeleteHabit(id) {
-        const response = await fetch(`/api/habit/delete/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-        });
-        if (!response.ok) {
-            console.log('Error')
-        }
-        getHabits();
-    }
 
     return (
         <div className='habitPage'>
             <header className='habitPage--header'>
                 <h1>Welcome to the Habit Page</h1>
-                <h2>{`Today is ${currentDate.getDate()} ${convertToMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`}</h2>
+                <h2>{`Today is ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h2>
             </header>
             <main className='habitPage--main'>
                 <section className='habitPage--main--habitList'>
                     <h3>{`Habits for ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     <table className='habitPage--main--habitTable'>
-                        <th>
-                            <td>Habit</td>
-                            {renderDayColumns()}
-
-                        </th>
-                        {renderHabits()}
+                        <thead>
+                            <tr>
+                                <th>Habit</th>
+                                {renderDayColumns()}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {(habits.length !== 0 && habitList.length !== 0) && renderHabits()}
+                        </tbody>
                     </table>
                 </section>
                 <section className='habitPage--main--stats'>

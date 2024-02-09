@@ -115,7 +115,8 @@ namespace BetterDay.Models
                                             ON hg.ID = h.GroupId
                                             INNER JOIN users u
                                             ON u.ID = h.UserID
-                                            WHERE u.Username = '{username}' AND DATE(hg.Date) BETWEEN '{startDate.ToString("yyyy-MM-dd")}' AND '{endDate.ToString("yyyy-MM-dd")}';", connection);
+                                            WHERE u.Username = '{username}' AND DATE(hg.Date) BETWEEN '{startDate.ToString("yyyy-MM-dd")}' AND '{endDate.ToString("yyyy-MM-dd")}'
+                                            ORDER BY hg.Date;", connection);
             var reader = await query.ExecuteReaderAsync();
 
             List<HabitGroupModel> groups = new List<HabitGroupModel>();
