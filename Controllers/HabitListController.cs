@@ -19,11 +19,11 @@ namespace BetterDay.Controllers
         }
 
         [HttpPut("add/{title}")]
-        public async Task<IActionResult> AddHabitToList(string title)
+        public async Task<int> AddHabitToList(string title)
         {
             string currUser = TokenHandler.GetCurrentUser(User.Claims);
             var result = await HabitListModel.AddHabitToList(currUser, title);
-            return new JsonResult(result);
+            return result;
         }
 
         [HttpDelete("delete/{id}")]

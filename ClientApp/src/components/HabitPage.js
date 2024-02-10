@@ -12,6 +12,8 @@ function HabitPage() {
     const chosenDate = new Date();
     const [habits, setHabits] = useState([]);
     const [habitList, setHabitList] = useState([]);
+    const newHabitTextRef = useRef(null);
+    const [newHabit, setNewHabit] = useState([]);
 
     async function getHabits() {
         const date = chosenDate;
@@ -90,7 +92,7 @@ function HabitPage() {
                     }
                 }
             }
-            toRender.push(<HabitRow key={name.title} title={name.title} habits={habitsToRow} />)
+            toRender.push(<HabitRow key={name.id} handleDeleteHabit={() => deleteHabit(name.id)} title={name.title} habits={habitsToRow} />)
         }
         return toRender;
     }
@@ -104,6 +106,58 @@ function HabitPage() {
         return toRender;
     }
 
+    function handleAddHabitChange(event) {
+        setNewHabit(event.target.value)
+    }
+
+    async function handleNewHabitSubmit() {
+        if (newHabit.length === 0) {
+            alert("Habit name can't be empty")
+            return;
+        }
+        const response1 = await fetch(`/api/habitList/add/${newHabit}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        const habitId = await response1.text();
+        if (!response1.ok) {
+            console.log('Error')
+        }
+        else {
+            const date = chosenDate;
+            const response2 = await fetch(`/api/habit/create/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({array: [{ id: habitId, title: newHabit }]}),
+            });
+            if (!response2.ok) {
+                console.log('Error')
+            }
+        }
+        setNewHabit('');
+        newHabitTextRef.current.value = '';
+        getHabits();
+        getHabitList();
+    }
+
+    async function deleteHabit(id) {
+        const response = await fetch(`/api/habitList/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            console.log('Error')
+        }
+        getHabits();
+        getHabitList();
+    }
 
     return (
         <div className='habitPage'>
@@ -124,6 +178,14 @@ function HabitPage() {
                         <tbody>
                             {(habits.length !== 0 && habitList.length !== 0) && renderHabits()}
                         </tbody>
+                        <tfoot className='tableFoot'>
+                            <tr>
+                                <td>
+                                    <input type='text' ref={newHabitTextRef} onChange={handleAddHabitChange} />
+                                    <input type='submit' value='➕' onClick={handleNewHabitSubmit} />
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </section>
                 <section className='habitPage--main--stats'>

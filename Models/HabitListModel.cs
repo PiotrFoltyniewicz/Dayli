@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using BetterDay.Errors;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace BetterDay.Models
 {
@@ -35,9 +36,9 @@ namespace BetterDay.Models
             await connection.CloseAsync();
             return habitlist;
         }
-        public async static Task<ApiError> AddHabitToList(string username, string title)
+        public async static Task<int> AddHabitToList(string username, string title)
         {
-            ApiError response;
+            int response = 0;
             var connection = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=betterdaydb");
             await connection.OpenAsync();
 
@@ -47,11 +48,17 @@ namespace BetterDay.Models
             var reader = await query.ExecuteReaderAsync();
             if (reader.RecordsAffected == 0)
             {
-                response = new ApiError(444, "Habit not added");
+                response = -1;
             }
             else
             {
-                response = new ApiError(200, "Habit successfully added");
+                await reader.CloseAsync();
+                query = new MySqlCommand($@"SELECT ID FROM habitslist WHERE ID= LAST_INSERT_ID()", connection);
+                reader = await query.ExecuteReaderAsync();
+                await reader.ReadAsync();
+                response = (int)reader[0];
+
+                await reader.CloseAsync();
             }
             await reader.CloseAsync();
             await connection.CloseAsync();
