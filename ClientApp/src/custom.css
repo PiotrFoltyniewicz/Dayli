@@ -441,10 +441,14 @@ body {
 
 .habitPage--main--habitTable, .habitPage--main--habitTable *{
     border: 1px solid black;
-    border-collapse: collapse;
+    border-radius: 4px;
 }
 
-.tableFoot{
+.habitPage--main--habitTable{
+    border: none;
+}
+
+.tableFoot {
     border: none;
 }
 
