@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import dayliLogo from '../images/dayliLogo.png';
 import { useAuth } from '../contexts/AuthContext';
 
-function Navbar(props) {
-    const { token } = useAuth();
+function Navbar() {
+    const { token, toggleLoginForm } = useAuth();
     const navbarRef = useRef();
     const loginButtonRef = useRef();
     const showNavbar = () => {
@@ -11,7 +11,7 @@ function Navbar(props) {
     };
 
     const handleLogInClick = () => {
-        props.setLogPopUp((prev) => !prev);
+        toggleLoginForm()
         showNavbar();
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
@@ -9,18 +9,16 @@ import TaskPage from './components/TaskPage'
 import NotePage from './components/NotePage'
 import HabitPage from './components/HabitPage'
 import './custom.css';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider} from './contexts/AuthContext';
 
 function App() {
-    const [logPopUp, setLogPopUp] = useState(false);
-
     return (
         <div className="App">
             <AuthProvider>
-                <Navbar setLogPopUp={setLogPopUp} />
+                <Navbar/>
                 <Routes>
                     <Route index element={<Home />} />
-                    <Route path="/home" element={<Home setLogPopUp={setLogPopUp} />} />
+                    <Route path="/home" element={<Home/>} />
                     <Route path="/about" element={<About />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/task" element={<TaskPage />} />
@@ -28,7 +26,7 @@ function App() {
                     <Route path="/note" element={<NotePage />} />
                 </Routes>
                 { /*<LoremIpsum /> */ }
-                {logPopUp && <Login setLogPopUp={setLogPopUp} />}
+                <Login/>
             </AuthProvider>
         </div>
     );

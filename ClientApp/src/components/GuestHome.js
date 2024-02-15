@@ -1,7 +1,8 @@
 ﻿import ImageGallery from './ImageGallery';
 import QuoteBlock from './QuoteBlock.js';
-
+import { useAuth } from '../contexts/AuthContext'
 function GuestHome() {
+    const { toggleLoginForm } = useAuth()
     const testImages = [
         {
             text: 'Plan your life',
@@ -17,14 +18,17 @@ function GuestHome() {
         }
     ];
 
+    function handleClick() {
+        toggleLoginForm()
+    }
     return (
         <div className='home--content' >
             <QuoteBlock />
             <h1>Boost your productivity with Dayli</h1>
-            <button>Join for free!</button>
-            <ImageGallery images={ testImages } />
+            <button onClick={handleClick}>Join for free!</button>
+            <ImageGallery images={testImages} />
             {/* Dawaj tu ten login popup jak sie kliknie */}
-            
+
         </div>
     )
 }
