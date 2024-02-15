@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(sessionStorage.getItem('jwtToken') || '');
+    const [isLoginFormVisible, setLoginFormVisible] = useState(false);
 
     const loginToken = (newToken) => {
         setToken(newToken);
@@ -15,9 +16,19 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.removeItem('jwtToken');
     };
 
+    const toggleLoginForm = () => {
+        setLoginFormVisible(!isLoginFormVisible);
+    };
+
     return (
-        <AuthContext.Provider value={{ token, loginToken, logoutToken}}>
-            {children}
+        <AuthContext.Provider value={{
+            token,
+            loginToken,
+            logoutToken,
+            isLoginFormVisible,
+            toggleLoginForm
+        }}>
+            {children}  
         </AuthContext.Provider>
     );
 };
