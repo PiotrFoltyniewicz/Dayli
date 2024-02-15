@@ -13,7 +13,7 @@ function LoggedHome() {
     // Getting initial data from database
     useEffect(() => {
         async function getTodayTasks() {
-            const taskResponse = await fetch('/api/task/today', {
+            let taskResponse = await fetch('/api/task/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,14 +22,13 @@ function LoggedHome() {
             });
 
             if (taskResponse.ok) {
-                const taskData = await taskResponse.json();
-                console.log(taskData)
+                let taskData = await taskResponse.json();
                 setTodayTasks(taskData);
             }
         }
 
         async function getTodayHabits() {
-            const habitResponse = await fetch('/api/habit/today', {
+            let habitResponse = await fetch('/api/habit/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,13 +37,13 @@ function LoggedHome() {
             });
 
             if (habitResponse.ok) {
-                const habitData = await habitResponse.json();
+                let habitData = await habitResponse.json();
                 setTodayHabits(habitData.habits);
             }
         }
 
         async function getTodayNote() {
-            const noteResponse = await fetch('/api/note/today', {
+            let noteResponse = await fetch('/api/note/today', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +52,7 @@ function LoggedHome() {
             });
 
             if (noteResponse.ok) {
-                const noteData = await noteResponse.json();
+                let noteData = await noteResponse.json();
                 setTodayNote(noteData);
             }
         }
