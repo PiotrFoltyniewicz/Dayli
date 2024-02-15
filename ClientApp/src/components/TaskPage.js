@@ -197,9 +197,14 @@ function TaskPage() {
             alert("Task description can't be empty")
             return;
         }
+        var year = chosenDate.toLocaleDateString('default', { year: 'numeric' });
+        var month = chosenDate.toLocaleDateString('default', { month: '2-digit' });
+        var day = chosenDate.toLocaleDateString('default', { day: '2-digit' });
+        var date = year + '-' + month + '-' + day; 
+
         const task = {
             id: 0,
-            date: new Date(chosenDate.toLocaleDateString("zu-ZA")),
+            date: date,
             title: newTask,
             status: false
         };

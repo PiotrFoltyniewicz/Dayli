@@ -23,6 +23,7 @@ function LoggedHome() {
 
             if (taskResponse.ok) {
                 const taskData = await taskResponse.json();
+                console.log(taskData)
                 setTodayTasks(taskData);
             }
         }

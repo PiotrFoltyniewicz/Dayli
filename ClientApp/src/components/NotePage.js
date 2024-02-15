@@ -119,9 +119,15 @@ function NotePage() {
             alert("Note can't be empty")
             return;
         }
+
+        var year = chosenDate.toLocaleDateString('default', { year: 'numeric' });
+        var month = chosenDate.toLocaleDateString('default', { month: '2-digit' });
+        var day = chosenDate.toLocaleDateString('default', { day: '2-digit' });
+        var date = year + '-' + month + '-' + day; 
+
         const note = {
             id: 0,
-            date: new Date(chosenDate.toLocaleDateString("zu-ZA")),
+            date: new Date(date),
             note: newNote
         };
         const response = await fetch('/api/note/create', {
