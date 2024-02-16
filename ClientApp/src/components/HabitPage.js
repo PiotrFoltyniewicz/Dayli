@@ -92,7 +92,10 @@ function HabitPage() {
                     }
                 }
             }
-            toRender.push(<HabitRow key={name.id} handleDeleteHabit={() => deleteHabit(name.id)} title={name.title} habits={habitsToRow} />)
+            if (habitsToRow.length > 0) {
+                toRender.push(<HabitRow key={name.id} handleDeleteHabit={() => deleteHabit(name.id)} title={name.title} habits={habitsToRow} />)
+            }
+            
         }
         return toRender;
     }
@@ -180,8 +183,8 @@ function HabitPage() {
                         </tbody>
                         <tfoot className='tableFoot'>
                             <tr>
-                                <td>
-                                    <input type='text' ref={newHabitTextRef} onChange={handleAddHabitChange} />
+                                <td className='addHabit'>
+                                    <input className='addHabit--text' type='text' ref={newHabitTextRef} onChange={handleAddHabitChange} />
                                     <input type='submit' value='➕' onClick={handleNewHabitSubmit} />
                                 </td>
                             </tr>

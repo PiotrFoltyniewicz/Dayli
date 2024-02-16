@@ -5,12 +5,8 @@ export default function Profile() {
     function handleLogOut() {
         logoutToken();
     }
-    function handleTest() {
-        console.log(token);
-    }
     return <>{ token && <section
         className="yourprofile">
         <button onClick={handleLogOut}>Log out</button>
-        <button onClick={handleTest}>Console log token</button>
     </section >}</>
 }

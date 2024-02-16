@@ -10,7 +10,6 @@ export async function loginMethod(username, password, loginToken, setPass) {
         const data = await response.text();
         const jwtToken = data;
         loginToken(jwtToken);
-        console.log("JWT Token:", jwtToken);
         setPass({ username: "", password: "" });
     } else {
         console.error('Login failed');
@@ -27,7 +26,6 @@ export async function registerMethod(username, password, loginToken, setPass) {
     } )
     if (response.ok) {
         const data = await response.text();
-        console.log(data)
         const { statusCode, message } = JSON.parse(data)
         if (statusCode === 201) {
             loginMethod(username, password, loginToken, setPass)

@@ -281,23 +281,49 @@ body {
     width: 90%;
 }
 
+.boxWrapper {
+    margin: 0px;
+    padding: 0px;
+    min-width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.boxButton {
+    background-color: lightgray;
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+    border: none;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.boxButton:hover {
+    background-color: darkgray;
+}
+
 .home--userContent--box {
     display: flex;
+    width: 100%;
     flex-direction: row;
-    min-width: 30%;
     min-height: 250px;
     background-color: lightgray;
     border-radius: 20px;
     padding: 10px 20px;
-    margin: 15px;
+    margin-bottom: 15px;
     font-size: 1.2em;
 }
 
-    .home--userContent--box div {
-        display: flex;
-        flex-direction: column;
-        width: 60%;
-    }
+.home--userContent--box div {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
 
 .taskElement, .habitElement, .noteElement {
     background-color: darkgray;
@@ -306,8 +332,8 @@ body {
     border-radius: 10px;
     display: flex;
     align-items: center;
+    word-break: break-word;
 }
-
 .home--userContent--circleProgressbar {
     width: 40%;
 }
@@ -324,13 +350,13 @@ body {
     padding: 0px 20px 0px 20px;
 }
 
-    .taskPage--header h2, .habitPage--header h2, .notePage--header h2 {
-        margin-top: 0px;
-    }
+.taskPage--header h2, .habitPage--header h2, .notePage--header h2 {
+    margin-top: 0px;
+}
 
-    .taskPage--header h1, .habitPage--header h1, .notePage--header h1 {
-        margin-bottom: 0px;
-    }
+.taskPage--header h1, .habitPage--header h1, .notePage--header h1 {
+    margin-bottom: 0px;
+}
 
 .taskPage--calendar, .habitPage--calendar, .notePage--calendar {
     border-radius: 20px;
@@ -410,9 +436,9 @@ body {
     height: 1.5em;
 }
 
-    .taskPage--main--addTask--button:hover, .notePage--main--addNote--button:hover {
-        background-color: gray;
-    }
+.taskPage--main--addTask--button:hover, .notePage--main--addNote--button:hover {
+    background-color: gray;
+}
 
 .taskElement--deleteButton, .noteElement--deleteButton, .noteElement--editButton, .noteElement--saveButton {
     background-color: darkgray;
@@ -424,11 +450,11 @@ body {
     font-size: 0.9em;
 }
 
-    .taskElement--deleteButton:hover, .noteElement--deleteButton:hover, .noteElement--editButton:hover, .noteElement--saveButton:hover {
-        background-color: gray;
-    }
+.taskElement--deleteButton:hover, .noteElement--deleteButton:hover, .noteElement--editButton:hover, .noteElement--saveButton:hover {
+    background-color: gray;
+}
 
-.taskPage--main--taskList, .notePage--main--noteList, .taskPage--main--taskList, .habitPage--main--habitList {
+.taskPage--main--taskList, .notePage--main--noteList {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -441,7 +467,20 @@ body {
     font-size: 1.2em;
 }
 
-.taskPage--main--stats, .habitPage--main--stats {
+.habitPage--main--habitList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    min-height: 350px;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 15px;
+    font-size: 1.2em;
+}
+
+.taskPage--main--stats {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -454,14 +493,36 @@ body {
     margin: 15px;
     font-size: 1.2em;
 }
+.habitPage--main--stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 20%;
+    max-width: 80%;
+    min-height: 350px;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 15px;
+    font-size: 1.2em;
+}
 
 .taskPage--main--stats--circleProgressbar, .habitPage--main--stats--circleProgressbar {
     width: 25%;
 }
 
-.habitPage--main--habitTable, .habitPage--main--habitTable * {
-    border: 1px solid black;
+.habitPage--main--habitTable, .habitPage--main--habitTable *{
+    border: 1px solid dimgray;
     border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.addHabit{
+    display: flex;
+}
+
+.addHabit--text{
+    width: 100px;
 }
 
 .habitPage--main--habitTable {
@@ -470,6 +531,16 @@ body {
 
 .tableFoot {
     border: none;
+}
+
+.about{
+    margin: 25px;
+    padding: 25px;
+    background-color: gainsboro;
+    border-radius: 25px;
+}
+.about h1{
+    margin-top: 5px;
 }
 
 /* Responsive design */

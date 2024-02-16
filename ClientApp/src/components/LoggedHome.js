@@ -139,38 +139,48 @@ function LoggedHome() {
             { /* Jakieś brane nazwy uzytkownika */}
             <h1>Welcome back</h1>
             <div className='home--userContent'>
-                <div className='home--userContent--box'>
-                    <div className='home--userContent--box--tasks'>
-                        <h2>Today tasks</h2>
-                        {todayTasks.length > 0 ? renderTodayTasks() : <p>There is nothing we can do</p>}
+                <div className='boxWrapper'>
+                    <div className='home--userContent--box'>
+                        <div className='home--userContent--box--tasks'>
+                            <h2>Today tasks</h2>
+                            {todayTasks.length > 0 ? renderTodayTasks() : <p>There is nothing we can do</p>}
+                        </div>
+                        {todayTasks.length > 0 &&
+                            <CircularProgressbar
+                               className='home--userContent--circleProgressbar'
+                               value={tasksDone}
+                               maxValue={todayTasks.length}
+                               text={`${Math.round(tasksDone / todayTasks.length * 100)}%`}
+                            />}
                     </div>
-                    {todayTasks.length > 0 &&
-                        <CircularProgressbar
-                           className='home--userContent--circleProgressbar'
-                           value={tasksDone}
-                           maxValue={todayTasks.length}
-                           text={`${Math.round(tasksDone / todayTasks.length * 100)}%`}
-                        />}
+                    <a className='boxButton' href='/task'>Task page</a>
                 </div>
-                <div className='home--userContent--box'>
-                    <div className='home--userContent--box--habits'>
-                        <h2>Habit tracker</h2>
-                        {todayHabits.length > 0 ? renderTodayHabits() : <p>There is nothing we can track</p>}
+                <div className='boxWrapper'>
+                    <div className='home--userContent--box'>
+                        <div className='home--userContent--box--habits'>
+                            <h2>Habit tracker</h2>
+                            {todayHabits.length > 0 ? renderTodayHabits() : <p>There is nothing we can track</p>}
+                        </div>
+                        {todayHabits.length > 0 &&
+                            <CircularProgressbar
+                                className='home--userContent--circleProgressbar'
+                                value={habitsDone}
+                                maxValue={todayHabits.length}
+                                text={`${Math.round(habitsDone / todayHabits.length * 100)}%`}
+                            />}
                     </div>
-                    {todayHabits.length > 0 &&
-                        <CircularProgressbar
-                            className='home--userContent--circleProgressbar'
-                            value={habitsDone}
-                            maxValue={todayHabits.length}
-                            text={`${Math.round(habitsDone / todayHabits.length * 100)}%`}
-                        />}
+                    <a className='boxButton' href='/habit'>Habit page</a>
                 </div>
-                <div className='home--userContent--box'>
-                    <div className='home--userContent--box--note'>
-                        <h2>Todays note</h2>
-                        {todayNote.length > 0 ? renderTodayNote() : <p>There is nothing we have noted</p>}
+                <div className='boxWrapper'>
+                    <div className='home--userContent--box'>
+                        <div className='home--userContent--box--note'>
+                            <h2>Todays note</h2>
+                            {todayNote.length > 0 ? renderTodayNote() : <p>There is nothing we have noted</p>}
+                        </div>
                     </div>
+                    <a className='boxButton' href='note'>Note page</a>
                 </div>
+                
             </div>
         </div>
     )
