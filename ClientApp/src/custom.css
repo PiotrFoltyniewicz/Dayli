@@ -47,7 +47,7 @@ body {
     padding: 10px 16px;
     height: 10%;
     position: sticky;
-    width: calc(100% - 32px);
+    width: 100%;
     top: 0;
     z-index: 100;
 }
@@ -361,7 +361,8 @@ body {
 .taskPage--calendar, .habitPage--calendar, .notePage--calendar {
     border-radius: 20px;
     min-width: 220px;
-    max-height: 300px;
+    max-height: 400px;
+    height: 100%;
     margin-top: 15px;
 }
 
