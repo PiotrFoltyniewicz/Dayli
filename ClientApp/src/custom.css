@@ -358,10 +358,16 @@ body {
     margin-bottom: 0px;
 }
 
-.taskPage--calendar, .habitPage--calendar, .notePage--calendar {
+.taskPage--calendar, .notePage--calendar {
     border-radius: 20px;
     min-width: 220px;
     max-height: 300px;
+    margin-top: 15px;
+}
+.habitPage--calendar{
+    max-height: 350px;
+    border-radius: 20px;
+    min-width: 220px;
     margin-top: 15px;
 }
 

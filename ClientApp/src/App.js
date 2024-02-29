@@ -4,10 +4,10 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Profile from './components/Profile';
-import About from './components/About'
-import TaskPage from './components/TaskPage'
-import NotePage from './components/NotePage'
-import HabitPage from './components/HabitPage'
+import About from './components/About';
+import TaskPage from './components/TaskPage';
+import NotePage from './components/NotePage';
+import HabitPage from './components/HabitPage';
 import './custom.css';
 import { AuthProvider} from './contexts/AuthContext';
 

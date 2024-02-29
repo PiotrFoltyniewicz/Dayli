@@ -9,7 +9,7 @@ import HabitRow from './HabitRow';
 function HabitPage() {
 
     const { token } = useAuth();
-    const chosenDate = new Date();
+    const [chosenDate, setChosenDate] = useState(new Date());
     const [habits, setHabits] = useState([]);
     const [habitList, setHabitList] = useState([]);
     const newHabitTextRef = useRef(null);
@@ -49,7 +49,7 @@ function HabitPage() {
     useEffect(() => {
         getHabits();
         getHabitList();
-    }, []);
+    }, [chosenDate]);
     function convertToMonthName(n) {
         switch (n) {
             case 0:
@@ -121,19 +121,22 @@ function HabitPage() {
 
         let habitAlreadyExist = false;
         let existingId = -1;
-        if (habits.length > 0) {
-            for (let name of habitList) {
-                if (!habitAlreadyExist && newHabit === name.title) {
-                    habitAlreadyExist = true;
-                    existingId = name.id;
+        for (let name of habitList) {
+            // BŁĄD
+            // Nie widzi kiedy newHabit === name.title
+            if (!habitAlreadyExist && newHabit === name.title) {
+                habitAlreadyExist = true;
+                existingId = name.id;
+                if (habits.length > 0) {
+
                     for (let habit of habits[0].habits) {
                         if (newHabit === habit.title) {
-                            alert("Habit with such name already exists in this month")
+                            alert("Habit with such name already exist in this month")
                             return;
                         }
                     }
-                    break;
                 }
+                break;
             }
         }
         if (!habitAlreadyExist) {
@@ -204,7 +207,11 @@ function HabitPage() {
                 <h2>{`Today is ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h2>
             </header>
             <main className='habitPage--main'>
-            <Calendar className='habitPage--calendar'/>
+                <Calendar
+                    className='habitPage--calendar'
+                    maxDetail='year'
+                    onChange={setChosenDate}
+                />
                 <section className='habitPage--main--habitList'>
                     <h3>{`Habits for ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     <table className='habitPage--main--habitTable'>
