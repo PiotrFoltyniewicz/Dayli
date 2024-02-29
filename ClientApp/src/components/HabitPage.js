@@ -118,15 +118,50 @@ function HabitPage() {
             alert("Habit name can't be empty")
             return;
         }
-        const response1 = await fetch(`/api/habitList/add/${newHabit}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        const habitId = await response1.text();
-        if (!response1.ok) {
-            console.log('Error')
+
+        let habitAlreadyExist = false;
+        let existingId = -1;
+        if (habits.length > 0) {
+            for (let name of habitList) {
+                if (!habitAlreadyExist && newHabit === name.title) {
+                    habitAlreadyExist = true;
+                    existingId = name.id;
+                    for (let habit of habits[0].habits) {
+                        if (newHabit === habit.title) {
+                            alert("Habit with such name already exists in this month")
+                            return;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        if (!habitAlreadyExist) {
+            const response1 = await fetch(`/api/habitList/add/${newHabit}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const habitId = await response1.text();
+            if (!response1.ok) {
+                console.log('Error');
+                return;
+            }
+            else {
+                const date = chosenDate;
+                const response2 = await fetch(`/api/habit/create/${date.getFullYear()}-${date.getMonth() + 1}-${1}:${date.getFullYear()}-${date.getMonth() + 1}-${new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ array: [{ id: habitId, title: newHabit }] }),
+                });
+                if (!response2.ok) {
+                    console.log('Error')
+                }
+            }
         }
         else {
             const date = chosenDate;
@@ -136,7 +171,7 @@ function HabitPage() {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({array: [{ id: habitId, title: newHabit }]}),
+                body: JSON.stringify({array: [{ id: existingId, title: newHabit }]}),
             });
             if (!response2.ok) {
                 console.log('Error')
@@ -169,6 +204,7 @@ function HabitPage() {
                 <h2>{`Today is ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h2>
             </header>
             <main className='habitPage--main'>
+            <Calendar className='habitPage--calendar'/>
                 <section className='habitPage--main--habitList'>
                     <h3>{`Habits for ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     <table className='habitPage--main--habitTable'>
