@@ -41,22 +41,8 @@ function HabitPage() {
         });
 
         if (habitListResponse.ok) {
-            // FILTR HABITLISTU I DODAĆ DO STATE
             const habitListData = await habitListResponse.json();
-            for (let name of habitList) {
-                const habitsToRow = []
-                for (let habitGroup of habits) {
-                    for (let habit of habitGroup.habits) {
-                        if (habit !== null && habit.title === name.title) {
-                            habitsToRow.push(habit);
-                        }
-                    }
-                }
-                if (habitsToRow.length > 0) {
-                    
-                }
-
-            }
+            setHabitList(habitListData);
         }
     }
 
@@ -183,8 +169,6 @@ function HabitPage() {
                 <h2>{`Today is ${chosenDate.getDate()} ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h2>
             </header>
             <main className='habitPage--main'>
-                <Calendar
-                    className='taskPage--calendar'/>
                 <section className='habitPage--main--habitList'>
                     <h3>{`Habits for ${convertToMonthName(chosenDate.getMonth())} ${chosenDate.getFullYear()}`}</h3>
                     <table className='habitPage--main--habitTable'>
