@@ -122,8 +122,6 @@ function HabitPage() {
         let habitAlreadyExist = false;
         let existingId = -1;
         for (let name of habitList) {
-            // BŁĄD
-            // Nie widzi kiedy newHabit === name.title
             if (!habitAlreadyExist && newHabit === name.title) {
                 habitAlreadyExist = true;
                 existingId = name.id;
